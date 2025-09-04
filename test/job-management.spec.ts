@@ -14,11 +14,11 @@ describe("[SDK] Job Management Client", () => {
     const jClient = sdk.GetJobManagementClient();
 
     before(async () => {
-        await cleanup(wClient);
+        //await cleanup(wClient);
     });
 
     after(async () => {
-        await cleanup(wClient);
+        //await cleanup(wClient);
     });
 
     it("1. should instantiate", async () => {
