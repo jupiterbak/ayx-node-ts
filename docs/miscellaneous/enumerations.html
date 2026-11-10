@@ -13,19 +13,91 @@
         <link rel="stylesheet" href="../styles/material.css">
     </head>
     <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="../" class="navbar-brand">@jupiterbak/ayx-node</a>
-            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">@jupiterbak/ayx-node</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
         </div>
 
         <div class="xs-menu menu" id="mobile-menu">
-                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
         </div>
 
         <div class="container-fluid main">
            <div class="row main">
-               <div class="hidden-xs menu">
+               <div class="d-none d-md-block menu">
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
@@ -49,12 +121,16 @@
 
 
 
+
+
+
+
 <ol class="breadcrumb">
-  <li>Miscellaneous</li>
-  <li>Enumerations</li>
+  <li class="breadcrumb-item">Miscellaneous</li>
+  <li class="breadcrumb-item">Enumerations</li>
 </ol>
 
-<section>
+<section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -62,94 +138,100 @@
                 <td class="col-md-4">
                     <ul class="index-list">
                         <li>
-                            <a href="#CategoryEnum" title="src/api/sdk/models/index.ts" ><b>CategoryEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#CategoryEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>CategoryEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#CategoryEnum" title="src/api/sdk/models/index.ts" ><b>CategoryEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#CategoryEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>CategoryEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#CategoryEnum" title="src/api/sdk/models/modelsV1.ts" ><b>CategoryEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV1.ts)</a>
+                            <a href="#CategoryEnum" title="src/api/sdk/models/modelsV1.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>CategoryEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV1.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#DayOfWeekEnum" title="src/api/sdk/models/index.ts" ><b>DayOfWeekEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#DayOfWeekEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>DayOfWeekEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#DaysOfWeekEnum" title="src/api/sdk/models/index.ts" ><b>DaysOfWeekEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#DaysOfWeekEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>DaysOfWeekEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#ExecutionModeEnum" title="src/api/sdk/models/index.ts" ><b>ExecutionModeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#ExecutionModeEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>ExecutionModeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#ExecutionModeEnum" title="src/api/sdk/models/index.ts" ><b>ExecutionModeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#ExecutionModeEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>ExecutionModeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#ExecutionModeEnum" title="src/api/sdk/models/index.ts" ><b>ExecutionModeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#ExecutionModeEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>ExecutionModeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#ExecutionModeEnum" title="src/api/sdk/models/index.ts" ><b>ExecutionModeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#ExecutionModeEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>ExecutionModeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#IterationTypeEnum" title="src/api/sdk/models/index.ts" ><b>IterationTypeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#IterationTypeEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>IterationTypeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#PackageTypeEnum" title="src/api/sdk/models/modelsV1.ts" ><b>PackageTypeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV1.ts)</a>
+                            <a href="#PackageTypeEnum" title="src/api/sdk/models/modelsV1.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>PackageTypeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV1.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#PackageTypeEnum" title="src/api/sdk/models/modelsV1.ts" ><b>PackageTypeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV1.ts)</a>
+                            <a href="#PackageTypeEnum" title="src/api/sdk/models/modelsV1.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>PackageTypeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV1.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#PackageWorkflowTypeEnum" title="src/api/sdk/models/index.ts" ><b>PackageWorkflowTypeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#PackageWorkflowTypeEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>PackageWorkflowTypeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#PriorityEnum" title="src/api/sdk/models/index.ts" ><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#PriorityEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#PriorityEnum" title="src/api/sdk/models/index.ts" ><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#PriorityEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#PriorityEnum" title="src/api/sdk/models/index.ts" ><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#PriorityEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#PriorityEnum" title="src/api/sdk/models/modelsV1.ts" ><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV1.ts)</a>
+                            <a href="#PriorityEnum" title="src/api/sdk/models/modelsV1.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV1.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#PriorityEnum" title="src/api/sdk/models/modelsV1.ts" ><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV1.ts)</a>
+                            <a href="#PriorityEnum" title="src/api/sdk/models/modelsV1.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV1.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#PriorityEnum" title="src/api/sdk/models/modelsV1.ts" ><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV1.ts)</a>
+                            <a href="#PriorityEnum" title="src/api/sdk/models/modelsV1.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV1.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#PriorityEnum" title="src/api/sdk/models/modelsV2.ts" ><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV2.ts)</a>
+                            <a href="#PriorityEnum" title="src/api/sdk/models/modelsV2.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>PriorityEnum</b>&nbsp;&nbsp;&nbsp;(src/.../modelsV2.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" ><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" ><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" ><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" ><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" ><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" ><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" ><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" ><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#RoleEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>RoleEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#UploadSourceEnum" title="src/api/sdk/models/index.ts" ><b>UploadSourceEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#StatusEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>StatusEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#WorkflowCredentialTypeEnum" title="src/api/sdk/models/index.ts" ><b>WorkflowCredentialTypeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
+                            <a href="#UploadSourceEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>UploadSourceEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
+                        </li>
+                        <li>
+                            <a href="#WorkflowCredentialTypeEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>WorkflowCredentialTypeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
+                        </li>
+                        <li>
+                            <a href="#WorkflowCredentialTypeEnum" title="src/api/sdk/models/index.ts" class="reference-link "><span class="reference-badge reference-badge--enum" aria-hidden="true">E</span><span class="reference-link-label"><b>WorkflowCredentialTypeEnum</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</span></a>
                         </li>
                     </ul>
                 </td>
@@ -159,7 +241,7 @@
 </section>
 
     <h3>src/api/sdk/models/index.ts</h3>
-    <section>
+    <section data-compodoc="block-enums">
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
@@ -884,6 +966,41 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
+                        <a name="StatusEnum"></a>
+                        <span class="name "><b>StatusEnum</b><a href="#StatusEnum"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                &nbsp;Created
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                &nbsp;Cancelled
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                &nbsp;Running
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                &nbsp;Queued
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                &nbsp;Completed
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
                         <a name="UploadSourceEnum"></a>
                         <span class="name "><b>UploadSourceEnum</b><a href="#UploadSourceEnum"><span class="icon ion-ios-link"></span></a></span>
                     </td>
@@ -925,9 +1042,34 @@
                         </tr>
             </tbody>
         </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="WorkflowCredentialTypeEnum"></a>
+                        <span class="name "><b>WorkflowCredentialTypeEnum</b><a href="#WorkflowCredentialTypeEnum"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                &nbsp;Default
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                &nbsp;Required
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                &nbsp;Specific
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
 </section>
     <h3>src/api/sdk/models/modelsV1.ts</h3>
-    <section>
+    <section data-compodoc="block-enums">
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
@@ -1105,7 +1247,7 @@
         </table>
 </section>
     <h3>src/api/sdk/models/modelsV2.ts</h3>
-    <section>
+    <section data-compodoc="block-enums">
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
@@ -1175,18 +1317,47 @@
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
 
        <script src="../js/menu-wc.js" defer></script>
-       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 
        <script src="../js/libs/es6-shim.min.js"></script>
        <script src="../js/libs/EventDispatcher.js"></script>
        <script src="../js/libs/promise.min.js"></script>
-       <script src="../js/libs/zepto.min.js"></script>
 
        <script src="../js/compodoc.js"></script>
 

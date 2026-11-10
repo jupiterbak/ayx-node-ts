@@ -13,19 +13,91 @@
         <link rel="stylesheet" href="../styles/material.css">
     </head>
     <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="../" class="navbar-brand">@jupiterbak/ayx-node</a>
-            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">@jupiterbak/ayx-node</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
         </div>
 
         <div class="xs-menu menu" id="mobile-menu">
-                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
         </div>
 
         <div class="container-fluid main">
            <div class="row main">
-               <div class="hidden-xs menu">
+               <div class="d-none d-md-block menu">
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
@@ -49,12 +121,16 @@
 
 
 
+
+
+
+
 <ol class="breadcrumb">
-  <li>Miscellaneous</li>
-  <li>Variables</li>
+  <li class="breadcrumb-item">Miscellaneous</li>
+  <li class="breadcrumb-item">Variables</li>
 </ol>
 
-<section>
+<section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -62,97 +138,94 @@
                 <td class="col-md-4">
                     <ul class="index-list">
                         <li>
-                            <a href="#adminWorkflowDataTemplate" title="src/api/sdk/admin/admin-data-template.ts" ><b>adminWorkflowDataTemplate</b>&nbsp;&nbsp;&nbsp;(src/.../admin-data-template.ts)</a>
+                            <a href="#adminWorkflowDataTemplate" title="src/api/sdk/admin/admin-data-template.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>adminWorkflowDataTemplate</b>&nbsp;&nbsp;&nbsp;(src/.../admin-data-template.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#AYX_NAME" title="src/version.ts" ><b>AYX_NAME</b>&nbsp;&nbsp;&nbsp;(src/.../version.ts)</a>
+                            <a href="#AYX_NAME" title="src/version.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>AYX_NAME</b>&nbsp;&nbsp;&nbsp;(src/.../version.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#AYX_VERSION" title="src/version.ts" ><b>AYX_VERSION</b>&nbsp;&nbsp;&nbsp;(src/.../version.ts)</a>
+                            <a href="#AYX_VERSION" title="src/version.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>AYX_VERSION</b>&nbsp;&nbsp;&nbsp;(src/.../version.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#checkAssetId" title="src/api/utils.ts" ><b>checkAssetId</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#checkAssetId" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>checkAssetId</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#decrypt" title="src/api/utils.ts" ><b>decrypt</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#decrypt" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>decrypt</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#encrypt" title="src/api/utils.ts" ><b>encrypt</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#encrypt" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>encrypt</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#errorHelper" title="test/test-utils.ts" ><b>errorHelper</b>&nbsp;&nbsp;&nbsp;(test/.../test-utils.ts)</a>
+                            <a href="#errorHelper" title="test/test-utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>errorHelper</b>&nbsp;&nbsp;&nbsp;(test/.../test-utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#FormData" title="src/api/sdk/admin/admin-data-template.ts" ><b>FormData</b>&nbsp;&nbsp;&nbsp;(src/.../admin-data-template.ts)</a>
+                            <a href="#FormData" title="src/api/sdk/admin/admin-data-template.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>FormData</b>&nbsp;&nbsp;&nbsp;(src/.../admin-data-template.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#FormData" title="src/api/sdk/user/user-data-template.ts" ><b>FormData</b>&nbsp;&nbsp;&nbsp;(src/.../user-data-template.ts)</a>
+                            <a href="#FormData" title="src/api/sdk/workflow/worflow-data-template.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>FormData</b>&nbsp;&nbsp;&nbsp;(src/.../worflow-data-template.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#FormData" title="src/api/sdk/workflow/worflow-data-template.ts" ><b>FormData</b>&nbsp;&nbsp;&nbsp;(src/.../worflow-data-template.ts)</a>
+                            <a href="#FormData" title="src/api/sdk/user/user-data-template.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>FormData</b>&nbsp;&nbsp;&nbsp;(src/.../user-data-template.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#getHomeDotAyxDir" title="src/api/utils.ts" ><b>getHomeDotAyxDir</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#getHomeDotAyxDir" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>getHomeDotAyxDir</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#HttpsProxyAgent" title="src/api/alteryx-base.ts" ><b>HttpsProxyAgent</b>&nbsp;&nbsp;&nbsp;(src/.../alteryx-base.ts)</a>
+                            <a href="#isUrl" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>isUrl</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#isUrl" title="src/api/utils.ts" ><b>isUrl</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#loadAuth" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>loadAuth</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#loadAuth" title="src/api/utils.ts" ><b>loadAuth</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#log" title="src/api/alteryx-base.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>log</b>&nbsp;&nbsp;&nbsp;(src/.../alteryx-base.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#log" title="src/api/alteryx-base.ts" ><b>log</b>&nbsp;&nbsp;&nbsp;(src/.../alteryx-base.ts)</a>
+                            <a href="#log" title="src/api/auth-base.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>log</b>&nbsp;&nbsp;&nbsp;(src/.../auth-base.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#log" title="src/api/auth-base.ts" ><b>log</b>&nbsp;&nbsp;&nbsp;(src/.../auth-base.ts)</a>
+                            <a href="#log" title="src/api/credential-auth.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>log</b>&nbsp;&nbsp;&nbsp;(src/.../credential-auth.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#log" title="src/api/credential-auth.ts" ><b>log</b>&nbsp;&nbsp;&nbsp;(src/.../credential-auth.ts)</a>
+                            <a href="#log" title="src/api/secret-credential-auth.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>log</b>&nbsp;&nbsp;&nbsp;(src/.../secret-credential-auth.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#log" title="src/api/secret-credential-auth.ts" ><b>log</b>&nbsp;&nbsp;&nbsp;(src/.../secret-credential-auth.ts)</a>
+                            <a href="#log" title="src/api/tokenmanager-auth.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>log</b>&nbsp;&nbsp;&nbsp;(src/.../tokenmanager-auth.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#log" title="src/api/tokenmanager-auth.ts" ><b>log</b>&nbsp;&nbsp;&nbsp;(src/.../tokenmanager-auth.ts)</a>
+                            <a href="#mochaAsync" title="test/test-utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>mochaAsync</b>&nbsp;&nbsp;&nbsp;(test/.../test-utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#mochaAsync" title="test/test-utils.ts" ><b>mochaAsync</b>&nbsp;&nbsp;&nbsp;(test/.../test-utils.ts)</a>
+                            <a href="#normalizePasskey" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>normalizePasskey</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#normalizePasskey" title="src/api/utils.ts" ><b>normalizePasskey</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#removeUndefined" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>removeUndefined</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#removeUndefined" title="src/api/utils.ts" ><b>removeUndefined</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#retry" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>retry</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#retry" title="src/api/utils.ts" ><b>retry</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#sleep" title="test/test-utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>sleep</b>&nbsp;&nbsp;&nbsp;(test/.../test-utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#sleep" title="test/test-utils.ts" ><b>sleep</b>&nbsp;&nbsp;&nbsp;(test/.../test-utils.ts)</a>
+                            <a href="#sleep" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>sleep</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#sleep" title="src/api/utils.ts" ><b>sleep</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#storeAuth" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>storeAuth</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#storeAuth" title="src/api/utils.ts" ><b>storeAuth</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#throwError" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>throwError</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#throwError" title="src/api/utils.ts" ><b>throwError</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#toQueryString" title="src/api/utils.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>toQueryString</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#toQueryString" title="src/api/utils.ts" ><b>toQueryString</b>&nbsp;&nbsp;&nbsp;(src/.../utils.ts)</a>
+                            <a href="#userDataTemplate" title="src/api/sdk/user/user-data-template.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>userDataTemplate</b>&nbsp;&nbsp;&nbsp;(src/.../user-data-template.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#userDataTemplate" title="src/api/sdk/user/user-data-template.ts" ><b>userDataTemplate</b>&nbsp;&nbsp;&nbsp;(src/.../user-data-template.ts)</a>
+                            <a href="#worflowDataTemplate" title="src/api/sdk/workflow/worflow-data-template.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>worflowDataTemplate</b>&nbsp;&nbsp;&nbsp;(src/.../worflow-data-template.ts)</span></a>
                         </li>
                         <li>
-                            <a href="#worflowDataTemplate" title="src/api/sdk/workflow/worflow-data-template.ts" ><b>worflowDataTemplate</b>&nbsp;&nbsp;&nbsp;(src/.../worflow-data-template.ts)</a>
-                        </li>
-                        <li>
-                            <a href="#worflowVersionDataTemplate" title="src/api/sdk/workflow/worflow-data-template.ts" ><b>worflowVersionDataTemplate</b>&nbsp;&nbsp;&nbsp;(src/.../worflow-data-template.ts)</a>
+                            <a href="#worflowVersionDataTemplate" title="src/api/sdk/workflow/worflow-data-template.ts" class="reference-link "><span class="reference-badge reference-badge--variable" aria-hidden="true">V</span><span class="reference-link-label"><b>worflowVersionDataTemplate</b>&nbsp;&nbsp;&nbsp;(src/.../worflow-data-template.ts)</span></a>
                         </li>
                     </ul>
                 </td>
@@ -162,7 +235,7 @@
 </section>
 
     <h3>src/api/sdk/admin/admin-data-template.ts</h3>
-    <section>
+    <section data-compodoc="block-properties">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -176,8 +249,14 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(params: any) &#x3D;&gt;{
-    var form &#x3D; new FormData();
+    const form &#x3D; new FormData();
 
     form.setBoundary(&quot;--alteryx&quot;);
     form.append( &#x27;file&#x27;, params.file  as Buffer, params.name );
@@ -192,7 +271,7 @@
     if (params.sourceAppId){
         form.append( &#x27;sourceAppId&#x27;, params.sourceAppId || &quot;AYX CLI&quot;);
     }
-    let data &#x3D; form.getBuffer();
+    const data &#x3D; form.getBuffer();
     return data;
 }</code>
                     </td>
@@ -214,6 +293,12 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>require(&#x27;form-data&#x27;)</code>
                     </td>
                 </tr>
@@ -223,7 +308,7 @@
     </table>
 </section>
     <h3>src/version.ts</h3>
-    <section>
+    <section data-compodoc="block-properties">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -269,7 +354,7 @@
                 </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Default value : </i><code>&quot;0.0.1&quot;</code>
+                        <i>Default value : </i><code>&quot;0.1.15&quot;</code>
                     </td>
                 </tr>
 
@@ -278,7 +363,7 @@
     </table>
 </section>
     <h3>src/api/utils.ts</h3>
-    <section>
+    <section data-compodoc="block-properties">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -292,6 +377,12 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(agentId: string) &#x3D;&gt; {
     if (!/[a-f0-9]{32}/gi.test(agentId)) {
         throw new Error(&quot;You have to pass valid 32 char long asset id&quot;);
@@ -300,6 +391,12 @@
                     </td>
                 </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Validates that an asset ID is a valid 32-character hexadecimal string.</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -316,12 +413,21 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(encryptedAuth: authJson, passkey: string): string &#x3D;&gt; {
+    // Create decipher with the same normalized passkey and stored IV
     const decipher &#x3D; crypto.createDecipheriv(
         &quot;aes-256-cbc&quot;,
         normalizePasskey(passkey),
         Buffer.from(encryptedAuth.iv, &quot;base64&quot;)
     );
+    
+    // Decrypt the auth string
     let dec &#x3D; decipher.update(encryptedAuth.auth, &quot;hex&quot;, &quot;utf8&quot;);
     dec +&#x3D; decipher.final(&quot;utf8&quot;);
     return dec;
@@ -329,6 +435,18 @@
                     </td>
                 </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Decrypts previously encrypted authentication credentials.</p>
+<p>The decryption process:</p>
+<ol>
+<li>Creates a decipher using the same algorithm, normalized passkey, and stored IV</li>
+<li>Decrypts the auth string from hex to utf8</li>
+<li>Returns the decrypted Basic auth string</li>
+</ol>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -345,6 +463,12 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>({
     gateway,
     clientID,
@@ -356,16 +480,23 @@
     comments,
     selected,
 }: credentialEntry): authJson &#x3D;&gt; {
+    // Create the base64 encoded Basic auth string (clientID:clientSecret)
     const base64encoded &#x3D; Buffer.from(&#x60;${clientID}:${clientSecret}&#x60;).toString(&quot;base64&quot;);
+    
+    // Generate a random initialization vector for AES encryption
     const iv &#x3D; crypto.randomBytes(16);
 
+    // Create cipher with normalized passkey and IV
     const cipher &#x3D; crypto.createCipheriv(&quot;aes-256-cbc&quot;, Buffer.from(normalizePasskey(passkey)), iv);
+    
+    // Encrypt the Basic auth string
     let crypted &#x3D; cipher.update(&#x60;Basic ${base64encoded}&#x60;, &quot;utf8&quot;, &quot;hex&quot;);
     crypted +&#x3D; cipher.final(&quot;hex&quot;);
 
+    // Return the encrypted auth data with metadata
     const encryptedAuth &#x3D; {
         auth: crypted.toString(),
-        iv: iv.toString(&quot;base64&quot;),
+        iv: iv.toString(&quot;base64&quot;),  // IV must be stored to decrypt later
         gateway: gateway,
         appName: appName,
         appVersion: appVersion,
@@ -373,12 +504,25 @@
         comments: comments,
         selected: selected
     };
-    // console.log(encryptedAuth);
     return encryptedAuth;
 }</code>
                     </td>
                 </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Encrypts client credentials using AES-256-CBC encryption.</p>
+<p>The encryption process:</p>
+<ol>
+<li>Combines clientID and clientSecret with a colon and encodes as base64</li>
+<li>Generates a random initialization vector (IV)</li>
+<li>Creates an AES cipher with the normalized passkey and IV</li>
+<li>Encrypts the &quot;Basic {base64encoded}&quot; string</li>
+<li>Returns the encrypted data along with the IV and metadata</li>
+</ol>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -395,12 +539,25 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>() &#x3D;&gt; {
     return &#x60;${os.homedir()}/.ayx/&#x60;;
 }</code>
                     </td>
                 </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Returns the path to the .ayx directory in the user&#39;s home directory.
+This directory is used to store authentication configuration.</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -415,6 +572,12 @@
                     </span>
                 </td>
             </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
                 <tr>
                     <td class="col-md-4">
                         <i>Default value : </i><code>(url: string): boolean &#x3D;&gt; {
@@ -444,11 +607,18 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(): SecretCredentials &#x3D;&gt; {
     let result: SecretCredentials | undefined &#x3D; undefined;
 
-    // Load configuration from environment variable    
+    // Check if all required environment variables are set
     if (!process.env.AYX_SERVER_API || !process.env.AYX_SERVER_CLIENTID || !process.env.AYX_SERVER_CLIENTSECRET) {
+        // Display a prominent error message with instructions
         console.error(&quot;--------------------------------------------------------------------------------------------&quot;);
         console.error(
             &quot;\x1b[31m%s\x1b[0m&quot;,
@@ -459,10 +629,12 @@
         process.exit(-1);
     }
 
+    // Extract values from environment variables
     const gateway &#x3D; process.env.AYX_SERVER_API;
     const clientId &#x3D; process.env.AYX_SERVER_CLIENTID;
     const clientSecret &#x3D; process.env.AYX_SERVER_CLIENTSECRET;
 
+    // Create credentials object if all values are present
     if(gateway &amp;&amp; clientId &amp;&amp; clientSecret){
         const newEntry: SecretCredentials &#x3D; {
             clientId: clientId,
@@ -472,6 +644,7 @@
         result &#x3D; newEntry;
     }
 
+    // Throw error if credentials couldn&#x27;t be created
     !result &amp;&amp;
         throwError(
             &quot;please configure the authentication properly.&quot;
@@ -482,6 +655,19 @@
                     </td>
                 </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Loads authentication credentials from environment variables.
+This function is primarily used for unit tests and CI/CD environments.</p>
+<p>The function expects the following environment variables to be set:</p>
+<ul>
+<li>AYX_SERVER_API: The Alteryx server API endpoint</li>
+<li>AYX_SERVER_CLIENTID: The client ID for authentication</li>
+<li>AYX_SERVER_CLIENTSECRET: The client secret for authentication</li>
+</ul>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -498,12 +684,26 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(passkey: string): string &#x3D;&gt; {
     return passkey.length &lt; 32 ? passkey + new Array(33 - passkey.length).join(&quot;$&quot;) : passkey.substr(0, 32);
 }</code>
                     </td>
                 </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Normalizes a passkey to ensure it&#39;s exactly 32 characters long as required by AES-256.
+If the passkey is shorter than 32 characters, it&#39;s padded with &#39;$&#39; characters.
+If longer, it&#39;s truncated to 32 characters.</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -520,6 +720,12 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(obj: any) &#x3D;&gt; {
     Object.keys(obj).forEach((key) &#x3D;&gt; obj[key] &#x3D;&#x3D;&#x3D; undefined &amp;&amp; delete obj[key]);
     return obj;
@@ -527,6 +733,13 @@
                     </td>
                 </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Removes all properties with undefined values from an object.
+This is useful for cleaning up objects before serialization or API requests.</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -543,21 +756,35 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>async (n: number, func: Function, timoutinMilliseconds: number &#x3D; 300, logFunction?: Function) &#x3D;&gt; {
     let error;
     for (let i &#x3D; 0; i &lt; n; i++) {
         try {
+            // Execute optional logging function before each attempt
             if (logFunction) {
                 logFunction();
             }
+            
+            // For retries (not the first attempt), wait with exponential backoff
             if (i &gt; 0) {
                 await sleep(i * timoutinMilliseconds);
             }
+            
+            // Attempt to execute the function and return result if successful
             return await func();
         } catch (err) {
+            // Store the error to throw if all attempts fail
             error &#x3D; err;
         }
     }
+    
+    // If we&#x27;ve exhausted all retry attempts, throw the last error
     throw error;
 }</code>
                     </td>
@@ -565,8 +792,17 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>retry the function n times (while progressively waiting for the success) until success
-the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
+                    <div class="io-description"><p>Retries a function with exponential backoff until it succeeds or reaches the maximum number of attempts.</p>
+<p>This implements a resilient retry mechanism with progressive delay:</p>
+<ul>
+<li>First attempt: immediate execution</li>
+<li>Second attempt: wait timeoutInMilliseconds</li>
+<li>Third attempt: wait 2 * timeoutInMilliseconds</li>
+<li>Fourth attempt: wait 3 * timeoutInMilliseconds
+And so on...</li>
+</ul>
+<p>This pattern is useful for operations that might fail temporarily due to network issues,
+rate limiting, or other transient failures.</p>
 </div>
                 </td>
             </tr>
@@ -586,10 +822,23 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(ms: any) &#x3D;&gt; new Promise((resolve) &#x3D;&gt; setTimeout(resolve, ms))</code>
                     </td>
                 </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Creates a promise that resolves after the specified number of milliseconds.
+Used for implementing delay/sleep functionality in async functions.</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -606,18 +855,33 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(auth: { credentials: authJson[] }) &#x3D;&gt; {
+    // Ensure the .ayx directory exists
     const homeDir &#x3D; getHomeDotAyxDir();
     if (!fs.existsSync(homeDir)) {
         fs.mkdirSync(homeDir);
     }
 
+    // Write the credentials to auth.json
     const pathName &#x3D; &#x60;${getHomeDotAyxDir()}auth.json&#x60;;
     fs.writeFileSync(pathName, JSON.stringify(auth));
 }</code>
                     </td>
                 </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Stores authentication credentials to the auth.json file.
+Creates the .ayx directory if it doesn&#39;t exist.</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -634,12 +898,25 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(error: string) &#x3D;&gt; {
     throw new Error(error);
 }</code>
                     </td>
                 </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Helper function to throw an error with a specific message.
+Used throughout the codebase for consistent error handling.</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -656,26 +933,49 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(qs: any) &#x3D;&gt; {
     return Object.keys(qs || {})
+        // Filter out undefined values
         .filter((key) &#x3D;&gt; {
             return qs[key] !&#x3D;&#x3D; undefined;
         })
+        // Convert each key-value pair to &quot;key&#x3D;value&quot; format
         .map((key) &#x3D;&gt; {
+            // Special handling for Date objects
             const value &#x3D; qs[key] instanceof Date ? qs[key].toISOString() : qs[key];
             return encodeURIComponent(key) + &quot;&#x3D;&quot; + encodeURIComponent(value);
         })
+        // Join all pairs with &#x27;&amp;&#x27;
         .join(&quot;&amp;&quot;);
 }</code>
                     </td>
                 </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Converts an object to a URL query string.</p>
+<p>This function:</p>
+<ol>
+<li>Filters out properties with undefined values</li>
+<li>Converts Date objects to ISO strings</li>
+<li>URL-encodes both keys and values</li>
+<li>Joins them with &#39;&amp;&#39; to form a valid query string</li>
+</ol>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
 </section>
     <h3>test/test-utils.ts</h3>
-    <section>
+    <section data-compodoc="block-properties">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -687,6 +987,12 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
                     </span>
                 </td>
             </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
                 <tr>
                     <td class="col-md-4">
                         <i>Default value : </i><code>async (fn: Function): Promise&lt;boolean&gt; &#x3D;&gt; {
@@ -717,6 +1023,12 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(fn: any) &#x3D;&gt; {
     return (done: any) &#x3D;&gt; {
         fn.call().then(done, (err: any) &#x3D;&gt; {
@@ -743,6 +1055,12 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(ms: any) &#x3D;&gt; new Promise((resolve) &#x3D;&gt; setTimeout(resolve, ms))</code>
                     </td>
                 </tr>
@@ -751,59 +1069,8 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
         </tbody>
     </table>
 </section>
-    <h3>src/api/sdk/user/user-data-template.ts</h3>
-    <section>
-    <h3></h3>    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="FormData"></a>
-                    <span class="name">
-                        <span ><b>FormData</b></span>
-                        <a href="#FormData"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>require(&#x27;form-data&#x27;)</code>
-                    </td>
-                </tr>
-
-
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="userDataTemplate"></a>
-                    <span class="name">
-                        <span ><b>userDataTemplate</b></span>
-                        <a href="#userDataTemplate"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <i>Default value : </i><code>(params: any) &#x3D;&gt;{
-    var form &#x3D; new FormData();
-    form.setBoundary(&quot;--alteryx&quot;);
-    form.append( &#x27;file&#x27;, params.file  as Buffer, params.name );
-    form.append( &#x27;name&#x27;, params.name );
-    form.append( &#x27;index&#x27;, 0 );
-    let data &#x3D; form.getBuffer();
-    return data;
-}</code>
-                    </td>
-                </tr>
-
-
-        </tbody>
-    </table>
-</section>
     <h3>src/api/sdk/workflow/worflow-data-template.ts</h3>
-    <section>
+    <section data-compodoc="block-properties">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -815,6 +1082,12 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
                     </span>
                 </td>
             </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
                 <tr>
                     <td class="col-md-4">
                         <i>Default value : </i><code>require(&#x27;form-data&#x27;)</code>
@@ -837,8 +1110,14 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(params: any) &#x3D;&gt;{
-    var form &#x3D; new FormData();
+    const form &#x3D; new FormData();
     form.setBoundary(&quot;--alteryx&quot;);
     form.append( &#x27;file&#x27;, params.file  as Buffer, params.name );
     form.append( &#x27;ownerId&#x27;, params.ownerId );
@@ -852,11 +1131,21 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
     form.append( &#x27;workerTag&#x27;, params.workerTag || &quot;&quot;);
     form.append( &#x27;districtTags&#x27;, params.districtTags || &quot;&quot;);
     form.append( &#x27;hasPrivateDataExemption&#x27;, String(params.hasPrivateDataExemption || false));
+
+    if (params.workflowCredentialType){ 
+        form.append( &#x27;workflowCredentialType&#x27;, params.workflowCredentialType || &quot;Default&quot;);
+    }
+    if (params.credentialId){
+        form.append( &#x27;credentialId&#x27;, params.credentialId || &quot;&quot;);
+    }
+    if (params.collectionIds){
+        form.append( &#x27;collectionIds&#x27;, params.credentialId || &quot;[]&quot;);
+    }
     
     if (params.sourceAppId){
         form.append( &#x27;sourceAppId&#x27;, params.sourceAppId || &quot;AYX CLI&quot;);
     }
-    let data &#x3D; form.getBuffer();
+    const data &#x3D; form.getBuffer();
     return data;
 }</code>
                     </td>
@@ -878,8 +1167,14 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(params: any) &#x3D;&gt; {
-    var form &#x3D; new FormData();
+    const form &#x3D; new FormData();
     form.setBoundary(&quot;--alteryx&quot;);
     if (params.file){
         form.append( &#x27;file&#x27;, params.file  as Buffer, params.name );
@@ -890,14 +1185,22 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
     form.append( &#x27;othersMayDownload&#x27;, String(params.othersMayDownload || false ) );
     form.append( &#x27;othersCanExecute&#x27;, String(params.othersCanExecute || false ) );
     form.append( &#x27;executionMode&#x27;, String(params.executionMode|| false ) );
-    form.append( &#x27;comments&#x27;, params.comments || &quot;Generated by Ayx Typescript SDK&quot; );
+    if (params.workflowCredentialType){
+        form.append( &#x27;workflowCredentialType&#x27;, params.workflowCredentialType || &quot;Default&quot;);
+    }
+    if (params.comments){
+        form.append( &#x27;comments&#x27;, params.comments || &quot;Generated by Ayx Typescript SDK&quot; );
+    }    
     if (params.hasPrivateDataExemption){
         form.append( &#x27;hasPrivateDataExemption&#x27;, String(params.hasPrivateDataExemption || false));
+    }
+    if (params.credentialId){
+        form.append( &#x27;credentialId&#x27;, params.credentialId || &quot;&quot;);
     }
     if (params.sourceAppId){
         form.append( &#x27;sourceAppId&#x27;, params.sourceAppId || &quot;AYX CLI&quot;);
     }
-    let data &#x3D; form.getBuffer();
+    const data &#x3D; form.getBuffer();
     return data;
 }</code>
                     </td>
@@ -907,22 +1210,28 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
         </tbody>
     </table>
 </section>
-    <h3>src/api/alteryx-base.ts</h3>
-    <section>
+    <h3>src/api/sdk/user/user-data-template.ts</h3>
+    <section data-compodoc="block-properties">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="HttpsProxyAgent"></a>
+                    <a name="FormData"></a>
                     <span class="name">
-                        <span ><b>HttpsProxyAgent</b></span>
-                        <a href="#HttpsProxyAgent"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>FormData</b></span>
+                        <a href="#FormData"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
                 <tr>
                     <td class="col-md-4">
-                        <i>Default value : </i><code>require(&quot;https-proxy-agent&quot;)</code>
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>require(&#x27;form-data&#x27;)</code>
                     </td>
                 </tr>
 
@@ -933,6 +1242,43 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="userDataTemplate"></a>
+                    <span class="name">
+                        <span ><b>userDataTemplate</b></span>
+                        <a href="#userDataTemplate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(params: any) &#x3D;&gt;{
+    const form &#x3D; new FormData();
+    form.setBoundary(&quot;--alteryx&quot;);
+    form.append( &#x27;file&#x27;, params.file  as Buffer, params.name );
+    form.append( &#x27;name&#x27;, params.name );
+    form.append( &#x27;index&#x27;, 0 );
+    const data &#x3D; form.getBuffer();
+    return data;
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/api/alteryx-base.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="log"></a>
                     <span class="name">
                         <span ><b>log</b></span>
@@ -940,6 +1286,12 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
                     </span>
                 </td>
             </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
                 <tr>
                     <td class="col-md-4">
                         <i>Default value : </i><code>debug(&quot;ayx-node&quot;)</code>
@@ -951,7 +1303,7 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
     </table>
 </section>
     <h3>src/api/auth-base.ts</h3>
-    <section>
+    <section data-compodoc="block-properties">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -963,6 +1315,12 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
                     </span>
                 </td>
             </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
                 <tr>
                     <td class="col-md-4">
                         <i>Default value : </i><code>debug(&quot;alteryx-authbase&quot;)</code>
@@ -974,7 +1332,7 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
     </table>
 </section>
     <h3>src/api/credential-auth.ts</h3>
-    <section>
+    <section data-compodoc="block-properties">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -986,6 +1344,12 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
                     </span>
                 </td>
             </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
                 <tr>
                     <td class="col-md-4">
                         <i>Default value : </i><code>debug(&quot;alteryx-credentialauth&quot;)</code>
@@ -997,7 +1361,7 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
     </table>
 </section>
     <h3>src/api/secret-credential-auth.ts</h3>
-    <section>
+    <section data-compodoc="block-properties">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -1011,6 +1375,12 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>debug(&quot;alteryx-credentialauth&quot;)</code>
                     </td>
                 </tr>
@@ -1020,7 +1390,7 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
     </table>
 </section>
     <h3>src/api/tokenmanager-auth.ts</h3>
-    <section>
+    <section data-compodoc="block-properties">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -1032,6 +1402,12 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
                     </span>
                 </td>
             </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
                 <tr>
                     <td class="col-md-4">
                         <i>Default value : </i><code>debug(&quot;alteryx-credentialauth&quot;)</code>
@@ -1075,18 +1451,47 @@ the waiting schema is iteration * timeoutInMiliseconds (default is 300ms)</p>
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
 
        <script src="../js/menu-wc.js" defer></script>
-       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 
        <script src="../js/libs/es6-shim.min.js"></script>
        <script src="../js/libs/EventDispatcher.js"></script>
        <script src="../js/libs/promise.min.js"></script>
-       <script src="../js/libs/zepto.min.js"></script>
 
        <script src="../js/compodoc.js"></script>
 

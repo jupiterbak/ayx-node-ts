@@ -13,19 +13,91 @@
         <link rel="stylesheet" href="../styles/material.css">
     </head>
     <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="../" class="navbar-brand">@jupiterbak/ayx-node</a>
-            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">@jupiterbak/ayx-node</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
         </div>
 
         <div class="xs-menu menu" id="mobile-menu">
-                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
         </div>
 
         <div class="container-fluid main">
            <div class="row main">
-               <div class="hidden-xs menu">
+               <div class="d-none d-md-block menu">
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
@@ -43,35 +115,60 @@
 
 
 
+
+
+
+
 <ol class="breadcrumb">
-  <li>Classes</li>
-  <li >WorkflowManagementClient</li>
+  <li class="breadcrumb-item">Classes</li>
+  <li class="breadcrumb-item" >WorkflowManagementClient</li>
 </ol>
 
+<div class="io-file io-file-path" data-compodoc="entity-file-path">
+    <span class="icon ion-ios-document" aria-hidden="true"></span>
+    <code>src/api/sdk/workflow/workflow.ts</code>
+</div>
+
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#api" 
+                class="nav-link"
+                
+                role="tab" id="api-tab" data-bs-toggle="tab" data-link="api">API</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
-        <p class="comment">
-            <h3>File</h3>
-        </p>
-        <p class="comment">
-            <code>src/api/sdk/workflow/workflow.ts</code>
-        </p>
-
+    <div class="tab-pane fade active in" id="info">
 
             <p class="comment">
                 <h3>Description</h3>
             </p>
             <p class="comment">
-                <p>The Workflow Management API provides a means form managing workflows.</p>
+                <p>The Workflow Management API provides a means for managing workflows in Alteryx Server.</p>
+<p>This client extends the V1 client and implements the V3 API endpoints, providing
+comprehensive workflow management capabilities including:</p>
+<ul>
+<li>Retrieving workflow details and listings</li>
+<li>Creating and updating workflows</li>
+<li>Managing workflow versions</li>
+<li>Downloading workflow packages</li>
+<li>Retrieving workflow questions and jobs</li>
+<li>Deleting workflows</li>
+</ul>
+<p>{WorkflowManagementClientV1}</p>
 
             </p>
 
@@ -79,121 +176,180 @@
                 <h3>Extends</h3>
             </p>
             <p class="comment">
-                        <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
+                            <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
             </p>
 
 
 
-            <section>
+                <section data-compodoc="block-relationships">
+            <h3>Relationships</h3>
+
+            <div class="row pt-3">
+                <div class="col-sm-6">
+                    <h4>Used by</h4>
+                        <p class="comment"><i>No results matching.</i></p>
+                </div>
+
+                <div class="col-sm-6">
+                    <h4>Depends on</h4>
+                        <ul class="list-unstyled relationships-list">
+                                <li>
+                                            <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
+                                </li>
+                        </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="tab-pane fade " id="api">
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
-    <table class="table table-sm table-bordered index-table">
-        <tbody>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
                 <tr>
-                    <td class="col-md-4">
+                    <td class="col-md-3">
                         <h6><b>Properties</b></h6>
                     </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
+                    <td class="col-md-9">
                         <ul class="index-list">
                             <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                     <span class="modifier">Private</span>
                                 <a href="#_baseUrl" >_baseUrl</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                     <span class="modifier">Private</span>
                                 <a href="#_baseUrlV1" >_baseUrlV1</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                     <span class="modifier">Protected</span>
                                 <a href="#_authenticator" >_authenticator</a>
                             </li>
                         </ul>
                     </td>
                 </tr>
+            </tbody>
+        </table>
 
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
                 <tr>
-                    <td class="col-md-4">
+                    <td class="col-md-3">
                         <h6><b>Methods</b></h6>
                     </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
+                    <td class="col-md-9">
                         <ul class="index-list">
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#AddVersionToWorkflow" >AddVersionToWorkflow</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#CreateWorkflow" >CreateWorkflow</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#DeleteWorkflow" >DeleteWorkflow</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#DownloadWorkflow" >DownloadWorkflow</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#GetJobsForWorkflow" >GetJobsForWorkflow</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#GetWorkflow" >GetWorkflow</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#GetWorkflows" >GetWorkflows</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#UpdateWorkflow" >UpdateWorkflow</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                    <span class="modifier">Public</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#workflowsGetWorkflowQuestions" >workflowsGetWorkflowQuestions</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#GetAppInfoV1" >GetAppInfoV1</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#GetAppQuestionsV1" >GetAppQuestionsV1</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#GetJobsForAppV1" >GetJobsForAppV1</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#GetStudioAppsV1" >GetStudioAppsV1</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#PostNewJobV1" >PostNewJobV1</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                 <a href="#GetGateway" >GetGateway</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                 <a href="#GetTenant" >GetTenant</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#GetToken" >GetToken</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#HttpAction" >HttpAction</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#RenewToken" >RenewToken</a>
@@ -201,17 +357,17 @@
                         </ul>
                     </td>
                 </tr>
+            </tbody>
+        </table>
 
 
 
 
 
-        </tbody>
-    </table>
 </section>
 
 
-            <section>
+            <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
@@ -241,10 +397,16 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="12" class="link-to-prism">src/api/sdk/workflow/workflow.ts:12</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/api/sdk/workflow/workflow.ts:26</a></div>
                         </td>
                     </tr>
 
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Base URL for all V3 workflow API endpoints</p>
+</div>
+                </td>
+            </tr>
 
         </tbody>
     </table>
@@ -279,7 +441,7 @@
                         </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in         <code><a href="../classes/WorkflowManagementClientV1.html#source" target="_self" >WorkflowManagementClientV1:12</a></code>
+                                <div class="io-line">        <code><a href="../classes/WorkflowManagementClientV1.html#source" target="_self" >WorkflowManagementClientV1:12</a></code>
 </div>
                         </td>
                     </tr>
@@ -313,7 +475,7 @@
                         </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in         <code><a href="../classes/SdkClient.html#source" target="_self" >SdkClient:33</a></code>
+                                <div class="io-line">        <code><a href="../classes/SdkClient.html#source" target="_self" >SdkClient:33</a></code>
 </div>
                         </td>
                     </tr>
@@ -323,7 +485,7 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -334,8 +496,8 @@
                 <td class="col-md-4">
                     <a name="AddVersionToWorkflow"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>AddVersionToWorkflow</b></span>
                         <a href="#AddVersionToWorkflow"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -343,82 +505,110 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>AddVersionToWorkflow(workflowId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: literal type)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>AddVersionToWorkflow(workflowId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: { file: any; name: string; ownerId: string; othersMayDownload: boolean; othersCanExecute: boolean; executionMode: string; makePublished: boolean; comments?: string; sourceAppId?: string; hasPrivateDataExemption?: boolean; workflowCredentialType: string; credentialId?: string })</code>
                 </td>
             </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="163"
-                            class="link-to-prism">src/api/sdk/workflow/workflow.ts:163</a></div>
-                </td>
-            </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="386"
+                                    class="link-to-prism">src/api/sdk/workflow/workflow.ts:386</a></div>
+                        </td>
+                    </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><div><pre class="line-numbers"><code class="language-none">     file?: any,
-     name: string,
-     ownerId: string,
-     othersMayDownload: boolean,
-     othersCanExecute: boolean,
-     executionMode: string,
-     makePublished?: boolean,
-     comments?: string,
-     sourceAppId?: string,
-     hasPrivateDataExemption?: boolean
-    }} [params]</code></pre></div></div>
+                        <div class="io-description"><p>Adds a new version to an existing workflow by uploading a new workflow package file.</p>
+<p>This method enables versioning of workflows, allowing for:</p>
+<ul>
+<li>Updating workflows with new functionality</li>
+<li>Maintaining multiple versions of the same workflow</li>
+<li>Optionally publishing the new version as the current active version</li>
+</ul>
+<p>Versioning is a key feature for workflow management as it allows for:</p>
+<ul>
+<li>Testing new versions without affecting production</li>
+<li>Rolling back to previous versions if issues are found</li>
+<li>Maintaining an audit trail of workflow changes</li>
+</ul>
+<p>Add a new version to an existing workflow
+WorkflowManagementClient</p>
+</div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>workflowId</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>workflowId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                            <code>literal type</code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;SDKModels.WorkflowView&gt;</code>
+                                            <td>
+                                                    <ul>
+<li>The ID of the existing workflow to add a version to</li>
+</ul>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>params</td>
+                                            <td>
+                                                        <code>{ file: any; name: string; ownerId: string; othersMayDownload: boolean; othersCanExecute: boolean; executionMode: string; makePublished: boolean; comments?: string; sourceAppId?: string; hasPrivateDataExemption?: boolean; workflowCredentialType: string; credentialId?: string }</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The version configuration parameters</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;SDKModels.WorkflowView&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <ul>
+<li>A promise that resolves to the updated workflow with the new version</li>
+</ul>
+
+                            </div>
+                            <div class="io-description">
+                                <b>Throws :</b>
+                                <ul>
+                                        <li><ul>
+<li>If any required parameters are missing</li>
+</ul>
+</li>
+                                </ul>
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -429,8 +619,8 @@
                 <td class="col-md-4">
                     <a name="CreateWorkflow"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>CreateWorkflow</b></span>
                         <a href="#CreateWorkflow"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -438,73 +628,91 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>CreateWorkflow(params?: literal type)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>CreateWorkflow(params?: { file: any; name: string; ownerId: string; isPublic: boolean; isReadyForMigration: boolean; othersMayDownload: boolean; othersCanExecute: boolean; executionMode: string; workflowCredentialType: string; workerTag?: string; districtTags?: string; comments?: string; sourceAppId?: string; hasPrivateDataExemption?: boolean; credentialId?: string; collectionIds?: string[] })</code>
                 </td>
             </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="105"
-                            class="link-to-prism">src/api/sdk/workflow/workflow.ts:105</a></div>
-                </td>
-            </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="281"
+                                    class="link-to-prism">src/api/sdk/workflow/workflow.ts:281</a></div>
+                        </td>
+                    </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><div><pre class="line-numbers"><code class="language-none">     file: any,
-     name: string,
-     ownerId: string,
-     isPublic: boolean,
-     isReadyForMigration: boolean,
-     othersMayDownload: boolean,
-     othersCanExecute: boolean,
-     executionMode: string,
-     workerTag?: string,
-     districtTags?: string,
-     comments?: string,
-     sourceAppId?: string,
-     hasPrivateDataExemption?: boolean
-   }} [params]</code></pre></div></div>
+                        <div class="io-description"><p>Creates a new workflow in Alteryx Server by uploading a workflow package file
+along with metadata and permission settings.</p>
+<p>This method handles the complex process of uploading a workflow file and configuring
+its properties, including:</p>
+<ul>
+<li>Basic metadata (name, owner, comments)</li>
+<li>Permission settings (public access, execution rights, download rights)</li>
+<li>Execution configuration (execution mode, credential requirements)</li>
+<li>Collection assignments</li>
+<li>Worker and district tags for execution routing</li>
+</ul>
+<p>The workflow file should be an Alteryx workflow package (.yxzp or .yxmd file).</p>
+<p>Upload a new workflow to Alteryx Server
+WorkflowManagementClient</p>
+</div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                            <code>literal type</code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>params</td>
+                                            <td>
+                                                        <code>{ file: any; name: string; ownerId: string; isPublic: boolean; isReadyForMigration: boolean; othersMayDownload: boolean; othersCanExecute: boolean; executionMode: string; workflowCredentialType: string; workerTag?: string; districtTags?: string; comments?: string; sourceAppId?: string; hasPrivateDataExemption?: boolean; credentialId?: string; collectionIds?: string[] }</code>
+                                            </td>
 
-                                    <td>
-                                        Yes
-                                    </td>
+                                            <td>
+                                                    Yes
+                                            </td>
 
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;String&gt;</code>
+                                            <td>
+                                                    <ul>
+<li>The workflow configuration parameters</li>
+</ul>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <ul>
+<li>A promise that resolves to the ID of the created workflow</li>
+</ul>
+
+                            </div>
+                            <div class="io-description">
+                                <b>Throws :</b>
+                                <ul>
+                                        <li><ul>
+<li>If any required parameters are missing</li>
+</ul>
+</li>
+                                </ul>
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -515,8 +723,8 @@
                 <td class="col-md-4">
                     <a name="DeleteWorkflow"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>DeleteWorkflow</b></span>
                         <a href="#DeleteWorkflow"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -524,80 +732,432 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
                     <code>DeleteWorkflow(workflowId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, force?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
                 </td>
             </tr>
 
 
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="473"
+                                    class="link-to-prism">src/api/sdk/workflow/workflow.ts:473</a></div>
+                        </td>
+                    </tr>
+
+
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="199"
-                            class="link-to-prism">src/api/sdk/workflow/workflow.ts:199</a></div>
+                        <div class="io-description"><p>Permanently deletes a workflow from Alteryx Server.</p>
+<p>This method removes a workflow and all its versions from the server. This is a
+destructive operation that cannot be undone, so it should be used with caution.</p>
+<p>If the workflow is associated with schedules, the operation will fail by default.
+Setting the force parameter to true will delete all associated schedules before
+deleting the workflow.</p>
+<p>Common use cases include:</p>
+<ul>
+<li>Removing obsolete or unused workflows</li>
+<li>Cleaning up test workflows</li>
+<li>Removing workflows that have been migrated to other systems</li>
+</ul>
+<p>Permanently delete a workflow and all its versions
+WorkflowManagementClient</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>workflowId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The ID of the workflow to delete</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>force</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Whether to force deletion by removing associated schedules</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;Response&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <ul>
+<li>A promise that resolves when the workflow is deleted</li>
+</ul>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="DownloadWorkflow"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>DownloadWorkflow</b></span>
+                        <a href="#DownloadWorkflow"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>DownloadWorkflow(workflowId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, versionId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
                 </td>
             </tr>
 
 
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="182"
+                                    class="link-to-prism">src/api/sdk/workflow/workflow.ts:182</a></div>
+                        </td>
+                    </tr>
+
+
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Downloads a workflow package file from Alteryx Server.</p>
+<p>This method retrieves the actual workflow file (.yxzp or .yxmd) that can be:</p>
+<ul>
+<li>Saved to disk for backup purposes</li>
+<li>Imported into Alteryx Designer for editing</li>
+<li>Uploaded to another Alteryx Server instance</li>
+<li>Used for version control or archiving</li>
+</ul>
+<p>By default, this method downloads the published (active) version of the workflow.
+You can specify a particular version by providing the versionId parameter.</p>
+<p>The response is a raw binary file that should be handled appropriately by the client.</p>
+<p>Download a workflow package file
+WorkflowManagementClient</p>
+</div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                    <td>Description</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>workflowId</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>workflowId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                    <td>
-                                        <p>id of workflow to delete</p>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>force</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
-                                    </td>
-
-                                    <td>
-                                        Yes
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
 
-                                    <td>
-                                        <p>if workflow is scheduled forcing will delete all schedules before deleting</p>
+                                            <td>
+                                                    <ul>
+<li>The ID of the workflow to download</li>
+</ul>
 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;Response&gt;</code>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>versionId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Optional specific version ID (defaults to published version)</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Optional HTTP request options</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;Response&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <ul>
+<li>A promise that resolves to the raw HTTP response with the file</li>
+</ul>
+
+                            </div>
+                            <div class="io-description">
+                                <b>Throws :</b>
+                                <ul>
+                                        <li><ul>
+<li>If the workflowId parameter is missing</li>
+</ul>
+</li>
+                                </ul>
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="GetJobsForWorkflow"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>GetJobsForWorkflow</b></span>
+                        <a href="#GetJobsForWorkflow"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>GetJobsForWorkflow(workflowId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, sortField?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, direction?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, offset?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, limit?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="129"
+                                    class="link-to-prism">src/api/sdk/workflow/workflow.ts:129</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Retrieves the execution history (jobs) for a specific workflow.</p>
+<p>This method returns information about past and current executions of a workflow,
+including status, start/end times, and execution parameters. It supports pagination
+and sorting to handle large numbers of job records efficiently.</p>
+<p>Common use cases include:</p>
+<ul>
+<li>Monitoring workflow execution history</li>
+<li>Auditing workflow usage</li>
+<li>Troubleshooting failed workflow executions</li>
+<li>Analyzing workflow performance over time</li>
+</ul>
+<p>Retrieve execution history for a workflow
+WorkflowManagementClient</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>workflowId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The ID of the workflow to get jobs for</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>sortField</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Field to sort results by (e.g., &quot;startDate&quot;, &quot;status&quot;)</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>direction</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Sort direction (&quot;asc&quot; or &quot;desc&quot;)</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>offset</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Pagination offset (starting record)</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>limit</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Maximum number of records to return</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Optional HTTP request options</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;Array&lt;SDKModels.WorkflowJobView&gt;&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <ul>
+<li>A promise that resolves to an array of workflow jobs</li>
+</ul>
+
+                            </div>
+                            <div class="io-description">
+                                <b>Throws :</b>
+                                <ul>
+                                        <li><ul>
+<li>If the workflowId parameter is missing</li>
+</ul>
+</li>
+                                </ul>
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -608,8 +1168,8 @@
                 <td class="col-md-4">
                     <a name="GetWorkflow"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>GetWorkflow</b></span>
                         <a href="#GetWorkflow"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -617,59 +1177,94 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>GetWorkflow(workflowId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank">String</a>)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>GetWorkflow(workflowId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="22"
-                            class="link-to-prism">src/api/sdk/workflow/workflow.ts:22</a></div>
-                </td>
-            </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="49"
+                                    class="link-to-prism">src/api/sdk/workflow/workflow.ts:49</a></div>
+                        </td>
+                    </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Retrieves detailed information about a specific workflow by its ID.</p>
+<p>This method fetches comprehensive information about a workflow, including:</p>
+<ul>
+<li>Basic metadata (name, description, creation date)</li>
+<li>Owner information</li>
+<li>Permission settings</li>
+<li>Version information</li>
+<li>Execution settings</li>
+</ul>
+<p>This is typically used to:</p>
+<ul>
+<li>Display workflow details to users</li>
+<li>Check workflow configuration before execution</li>
+<li>Verify workflow settings before making changes</li>
+</ul>
+<p>Retrieve a complete workflow record by ID
+WorkflowManagementClient</p>
+</div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>workflowId</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank" >String</a></code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>workflowId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;SDKModels.WorkflowView&gt;</code>
+                                            <td>
+                                                    <ul>
+<li>The unique identifier of the workflow to retrieve</li>
+</ul>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;SDKModels.WorkflowView&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <ul>
+<li>A promise that resolves to the workflow details</li>
+</ul>
+
+                            </div>
+                            <div class="io-description">
+                                <b>Throws :</b>
+                                <ul>
+                                        <li><ul>
+<li>If the workflowId parameter is missing</li>
+</ul>
+</li>
+                                </ul>
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -680,8 +1275,8 @@
                 <td class="col-md-4">
                     <a name="GetWorkflows"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>GetWorkflows</b></span>
                         <a href="#GetWorkflows"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -689,67 +1284,81 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>GetWorkflows(params?: literal type)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>GetWorkflows(params?: { view?: "Default" | "Full"; name?: string; ownerId?: string; createdAfter?: string; createdBefore?: string })</code>
                 </td>
             </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="53"
-                            class="link-to-prism">src/api/sdk/workflow/workflow.ts:53</a></div>
-                </td>
-            </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="227"
+                                    class="link-to-prism">src/api/sdk/workflow/workflow.ts:227</a></div>
+                        </td>
+                    </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><div><pre class="line-numbers"><code class="language-none">     view?: &#39;Default&#39; | &#39;Full&#39;,
-     name?: string,
-     ownerId?: string,
-     firstName?: string,
-     lastName?: string,
-     createdAfter?: Date,
-     createdBefore?: Date
-    }} [params]</code></pre></div></div>
+                        <div class="io-description"><p>Retrieves a list of workflows with optional filtering criteria.</p>
+<p>This method provides a powerful way to search and filter workflows based on various
+criteria such as name, owner, and creation date. It&#39;s commonly used for:</p>
+<ul>
+<li>Displaying workflow listings in user interfaces</li>
+<li>Finding workflows that match specific criteria</li>
+<li>Building workflow dashboards and reports</li>
+</ul>
+<p>The method returns a reduced view of workflows by default, which includes basic
+information but not all details. For complete workflow information, use the &#39;Full&#39;
+view parameter or call GetWorkflow() with a specific workflow ID.</p>
+<p>Retrieve a filtered list of workflows
+WorkflowManagementClient</p>
+</div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                            <code>literal type</code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>params</td>
+                                            <td>
+                                                        <code>{ view?: &quot;Default&quot; | &quot;Full&quot;; name?: string; ownerId?: string; createdAfter?: string; createdBefore?: string }</code>
+                                            </td>
 
-                                    <td>
-                                        Yes
-                                    </td>
+                                            <td>
+                                                    Yes
+                                            </td>
 
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;Array&lt;SDKModels.ReducedWorkflowView&gt;&gt;</code>
+                                            <td>
+                                                    <ul>
+<li>Optional filtering parameters</li>
+</ul>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;Array&lt;SDKModels.ReducedWorkflowView&gt;&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <ul>
+<li>A promise that resolves to an array of workflow records</li>
+</ul>
+
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -760,8 +1369,8 @@
                 <td class="col-md-4">
                     <a name="UpdateWorkflow"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>UpdateWorkflow</b></span>
                         <a href="#UpdateWorkflow"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -769,73 +1378,255 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
                     <code>UpdateWorkflow(workflowId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, updateWorkflowContract: SDKModels.UpdateWorkflowContract)</code>
                 </td>
             </tr>
 
 
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="509"
+                                    class="link-to-prism">src/api/sdk/workflow/workflow.ts:509</a></div>
+                        </td>
+                    </tr>
+
+
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="223"
-                            class="link-to-prism">src/api/sdk/workflow/workflow.ts:223</a></div>
+                        <div class="io-description"><p>Updates the metadata and settings of an existing workflow.</p>
+<p>This method allows modifying various aspects of a workflow without uploading a new
+workflow file or creating a new version. It&#39;s commonly used to:</p>
+<ul>
+<li>Change the workflow name or description</li>
+<li>Update permission settings</li>
+<li>Transfer ownership to another user</li>
+<li>Modify execution settings</li>
+</ul>
+<p>Note: To change the workflow owner (ownerId), the new owner must be in the same
+subscription as the current owner. This restriction ensures that workflows remain
+within their licensing boundaries.</p>
+<p>Update metadata and settings of an existing workflow
+WorkflowManagementClient</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>workflowId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The ID of the workflow to update</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>updateWorkflowContract</td>
+                                            <td>
+                                                        <code>SDKModels.UpdateWorkflowContract</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The updated workflow properties</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;SDKModels.WorkflowView&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <ul>
+<li>A promise that resolves to the updated workflow</li>
+</ul>
+
+                            </div>
+                            <div class="io-description">
+                                <b>Throws :</b>
+                                <ul>
+                                        <li><ul>
+<li>If any required parameters are missing</li>
+</ul>
+</li>
+                                </ul>
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="workflowsGetWorkflowQuestions"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>workflowsGetWorkflowQuestions</b></span>
+                        <a href="#workflowsGetWorkflowQuestions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>workflowsGetWorkflowQuestions(workflowId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, versionId?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
                 </td>
             </tr>
 
 
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="83"
+                                    class="link-to-prism">src/api/sdk/workflow/workflow.ts:83</a></div>
+                        </td>
+                    </tr>
+
+
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>To change the ownerId, the new owner must be in the same subscription as the current owner.</p>
+                        <div class="io-description"><p>Retrieves the questions defined in a workflow.</p>
+<p>Alteryx workflows can include questions that prompt users for input values when
+the workflow is executed. This method retrieves those questions, which can be used to:</p>
+<ul>
+<li>Build dynamic user interfaces for workflow execution</li>
+<li>Understand what inputs a workflow requires</li>
+<li>Prepare data for workflow execution</li>
+</ul>
+<p>Questions can include various types such as text inputs, dropdowns, file selectors,
+and more. Each question has properties like name, type, description, and default value.</p>
+<p>Retrieve the questions defined in a workflow
+WorkflowManagementClient</p>
 </div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>workflowId</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>workflowId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
+                                            <td>
+                                            </td>
 
-                                </tr>
-                                <tr>
-                                    <td>updateWorkflowContract</td>
-                                    <td>
-                                            <code>SDKModels.UpdateWorkflowContract</code>
-                                    </td>
+                                            <td>
+                                                    <ul>
+<li>The ID of the workflow to get questions for</li>
+</ul>
 
-                                    <td>
-                                        No
-                                    </td>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>versionId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
+                                            <td>
+                                                    Yes
+                                            </td>
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;SDKModels.WorkflowView&gt;</code>
+                                            <td>
+                                            </td>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                                            <td>
+                                                    <ul>
+<li>Optional specific version ID (defaults to published version)</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>{}</code>
+                                            </td>
+
+                                            <td>
+                                                    <ul>
+<li>Optional HTTP request options</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/WorkflowQuestionView.html" target="_self" >Promise&lt;Array&lt;SDKModels.WorkflowQuestionView&gt;&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <ul>
+<li>A promise that resolves to an array of workflow questions</li>
+</ul>
+
+                            </div>
+                            <div class="io-description">
+                                <b>Throws :</b>
+                                <ul>
+                                        <li><ul>
+<li>If the workflowId parameter is missing</li>
+</ul>
+</li>
+                                </ul>
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -846,8 +1637,8 @@
                 <td class="col-md-4">
                     <a name="GetAppInfoV1"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>GetAppInfoV1</b></span>
                         <a href="#GetAppInfoV1"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -855,65 +1646,72 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>GetAppInfoV1(appId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank">String</a>)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>GetAppInfoV1(appId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Inherited from         <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
 </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/WorkflowManagementClientV1.html#source" target="_self" >WorkflowManagementClientV1:22</a></code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/WorkflowManagementClientV1.html#source" target="_self" >WorkflowManagementClientV1:22</a></code>
 </div>
-                </td>
-            </tr>
+                        </td>
+                    </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Retrieve the app that was requested
+WorkflowManagementClientV1</p>
+</div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>appId</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank" >String</a></code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>appId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;Response&gt;</code>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;Response&gt;</code>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                            <div class="io-description">
+                                <b>Throws :</b>
+                                <ul>
+                                        <li></li>
+                                </ul>
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -924,8 +1722,8 @@
                 <td class="col-md-4">
                     <a name="GetAppQuestionsV1"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>GetAppQuestionsV1</b></span>
                         <a href="#GetAppQuestionsV1"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -933,72 +1731,78 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>GetAppQuestionsV1(appId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank">String</a>)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>GetAppQuestionsV1(appId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/WorkflowManagementClientV1.html#source" target="_self" >WorkflowManagementClientV1:46</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Inherited from         <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
-</div>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/WorkflowManagementClientV1.html#source" target="_self" >WorkflowManagementClientV1:46</a></code>
-</div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-description"><p>Only app workflows can be used.</p>
+                        <div class="io-description"><p>Only app workflows can be used.
+Get the questions for the given Alteryx Analytics App
+WorkflowManagementClientV1</p>
 </div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                    <td>Description</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>appId</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String" target="_blank" >String</a></code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>appId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
 
-                                    <td>
-                                        <p>The ID of the app for which you want to retrieve the questions.</p>
+                                            <td>
+                                                    <p>The ID of the app for which you want to retrieve the questions.</p>
 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../interfaces/QuestionApiView.html" target="_self" >Promise&lt;Array&lt;SDKModelsV1.QuestionApiView&gt;&gt;</a></code>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/QuestionApiView.html" target="_self" >Promise&lt;Array&lt;SDKModelsV1.QuestionApiView&gt;&gt;</a></code>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                            <div class="io-description">
+                                <b>Throws :</b>
+                                <ul>
+                                        <li></li>
+                                </ul>
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -1009,8 +1813,8 @@
                 <td class="col-md-4">
                     <a name="GetJobsForAppV1"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>GetJobsForAppV1</b></span>
                         <a href="#GetJobsForAppV1"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -1018,115 +1822,121 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
                     <code>GetJobsForAppV1(appId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, sortField?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, direction?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, offset?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, limit?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/WorkflowManagementClientV1.html#source" target="_self" >WorkflowManagementClientV1:73</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Inherited from         <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
-</div>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/WorkflowManagementClientV1.html#source" target="_self" >WorkflowManagementClientV1:73</a></code>
-</div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-description"><p>Only app workflows can be used.</p>
+                        <div class="io-description"><p>Only app workflows can be used.
+Returns the jobs for the given Alteryx Analytics App
+WorkflowManagementClientV1</p>
 </div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>appId</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>appId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>sortField</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        Yes
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
 
-                                </tr>
-                                <tr>
-                                    <td>direction</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
+                                        </tr>
+                                        <tr>
+                                                <td>sortField</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                                    <td>
-                                        Yes
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>offset</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        Yes
-                                    </td>
+                                            <td>
+                                                    Yes
+                                            </td>
 
 
-                                </tr>
-                                <tr>
-                                    <td>limit</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
+                                        </tr>
+                                        <tr>
+                                                <td>direction</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                                    <td>
-                                        Yes
-                                    </td>
+                                            <td>
+                                                    Yes
+                                            </td>
 
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;Array&lt;SDKModelsV1.JobListApiView&gt;&gt;</code>
+                                        </tr>
+                                        <tr>
+                                                <td>offset</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>limit</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;Array&lt;SDKModelsV1.JobListApiView&gt;&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                            <div class="io-description">
+                                <b>Throws :</b>
+                                <ul>
+                                        <li></li>
+                                </ul>
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -1137,8 +1947,8 @@
                 <td class="col-md-4">
                     <a name="GetStudioAppsV1"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>GetStudioAppsV1</b></span>
                         <a href="#GetStudioAppsV1"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -1146,152 +1956,158 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
                     <code>GetStudioAppsV1(sortField?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, direction?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, offset?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, limit?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, search?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, packageType?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/WorkflowManagementClientV1.html#source" target="_self" >WorkflowManagementClientV1:116</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Inherited from         <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
-</div>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/WorkflowManagementClientV1.html#source" target="_self" >WorkflowManagementClientV1:116</a></code>
-</div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-description"><p>Subscription is tied to API key. You cannot request workflows for any other subscription without that subscription&#39;s key.</p>
+                        <div class="io-description"><p>Subscription is tied to API key. You cannot request workflows for any other subscription without that subscription&#39;s key.
+Finds workflows in a subscription
+WorkflowManagementClientV1</p>
 </div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                    <td>Description</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>sortField</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>sortField</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                                    <td>
-                                        Yes
-                                    </td>
-
-
-                                    <td>
-                                        <p>The field on which in the results should be sorted.&lt;br /&gt;author; copyright;datemadepublic;description;executionmode;name;owner;runcount;subscriptionid;uploaddate;</p>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>direction</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        Yes
-                                    </td>
+                                            <td>
+                                                    Yes
+                                            </td>
 
 
-                                    <td>
-                                        <p>The direction of the sort used with search results.</p>
+                                            <td>
+                                                    <p>The field on which in the results should be sorted.&lt;br /&gt;author; copyright;datemadepublic;description;executionmode;name;owner;runcount;subscriptionid;uploaddate;</p>
 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>offset</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
-                                    </td>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>direction</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                                    <td>
-                                        Yes
-                                    </td>
-
-
-                                    <td>
-                                        <p>The index of the first record to return in the result set.</p>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>limit</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
-                                    </td>
-
-                                    <td>
-                                        Yes
-                                    </td>
+                                            <td>
+                                                    Yes
+                                            </td>
 
 
-                                    <td>
-                                        <p>The number of records to return.</p>
+                                            <td>
+                                                    <p>The direction of the sort used with search results.</p>
 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>search</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>offset</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
 
-                                    <td>
-                                        Yes
-                                    </td>
-
-
-                                    <td>
-                                        <p>Only result containing the search text will be returned.</p>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>packageType</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        Yes
-                                    </td>
+                                            <td>
+                                                    Yes
+                                            </td>
 
 
-                                    <td>
-                                        <p>The type of workflow to be returned, any of 1 (apps), 1(workflow), 2(macros).</p>
+                                            <td>
+                                                    <p>The index of the first record to return in the result set.</p>
 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;Array&lt;SDKModelsV1.WorkflowApiView&gt;&gt;</code>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>limit</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <p>The number of records to return.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>search</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <p>Only result containing the search text will be returned.</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>packageType</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <p>The type of workflow to be returned, any of 1 (apps), 1(workflow), 2(macros).</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;Array&lt;SDKModelsV1.WorkflowApiView&gt;&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                            <div class="io-description">
+                                <b>Throws :</b>
+                                <ul>
+                                        <li></li>
+                                </ul>
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -1302,8 +2118,8 @@
                 <td class="col-md-4">
                     <a name="PostNewJobV1"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>PostNewJobV1</b></span>
                         <a href="#PostNewJobV1"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -1311,88 +2127,94 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
                     <code>PostNewJobV1(appId: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, values: SDKModelsV1.AppValues)</code>
                 </td>
             </tr>
 
 
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
+</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/WorkflowManagementClientV1.html#source" target="_self" >WorkflowManagementClientV1:157</a></code>
+</div>
+                        </td>
+                    </tr>
+
+
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Inherited from         <code><a href="../classes/WorkflowManagementClientV1.html" target="_self" >WorkflowManagementClientV1</a></code>
-</div>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/WorkflowManagementClientV1.html#source" target="_self" >WorkflowManagementClientV1:157</a></code>
-</div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-description"><p>Use the status request to get the results of the job.</p>
+                        <div class="io-description"><p>Use the status request to get the results of the job.
+Queues a job execution for the specified workflow with the supplied answers</p>
+<p>WorkflowManagementClientV1</p>
 </div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                    <td>Description</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>appId</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>appId</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                    <td>
-                                        <p>The id for the workflow to execute.</p>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>values</td>
-                                    <td>
-                                            <code>SDKModelsV1.AppValues</code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
 
-                                    <td>
-                                        <p>The list of answers to execute the workflow with.</p>
+                                            <td>
+                                                    <p>The id for the workflow to execute.</p>
 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;SDKModelsV1.JobApiView&gt;</code>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>values</td>
+                                            <td>
+                                                        <code>SDKModelsV1.AppValues</code>
+                                            </td>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>The list of answers to execute the workflow with.</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;SDKModelsV1.JobApiView&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                            <div class="io-description">
+                                <b>Throws :</b>
+                                <ul>
+                                        <li></li>
+                                </ul>
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -1403,7 +2225,7 @@
                 <td class="col-md-4">
                     <a name="GetGateway"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
+                            <span class="modifier">Public</span>
                         <span ><b>GetGateway</b></span>
                         <a href="#GetGateway"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -1411,33 +2233,33 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
                     <code>GetGateway()</code>
                 </td>
             </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Inherited from         <code><a href="../classes/SdkClient.html" target="_self" >SdkClient</a></code>
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/SdkClient.html" target="_self" >SdkClient</a></code>
 </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/SdkClient.html#source" target="_self" >SdkClient:25</a></code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/SdkClient.html#source" target="_self" >SdkClient:25</a></code>
 </div>
-                </td>
-            </tr>
+                        </td>
+                    </tr>
 
 
             <tr>
                 <td class="col-md-4">
 
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
 
-                    </div>
+                        </div>
                 </td>
             </tr>
         </tbody>
@@ -1448,7 +2270,7 @@
                 <td class="col-md-4">
                     <a name="GetTenant"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
+                            <span class="modifier">Public</span>
                         <span ><b>GetTenant</b></span>
                         <a href="#GetTenant"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -1456,33 +2278,33 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
                     <code>GetTenant()</code>
                 </td>
             </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Inherited from         <code><a href="../classes/SdkClient.html" target="_self" >SdkClient</a></code>
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/SdkClient.html" target="_self" >SdkClient</a></code>
 </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/SdkClient.html#source" target="_self" >SdkClient:29</a></code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/SdkClient.html#source" target="_self" >SdkClient:29</a></code>
 </div>
-                </td>
-            </tr>
+                        </td>
+                    </tr>
 
 
             <tr>
                 <td class="col-md-4">
 
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
 
-                    </div>
+                        </div>
                 </td>
             </tr>
         </tbody>
@@ -1493,8 +2315,8 @@
                 <td class="col-md-4">
                     <a name="GetToken"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>GetToken</b></span>
                         <a href="#GetToken"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -1502,33 +2324,33 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
                     <code>GetToken()</code>
                 </td>
             </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Inherited from         <code><a href="../classes/SdkClient.html" target="_self" >SdkClient</a></code>
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/SdkClient.html" target="_self" >SdkClient</a></code>
 </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/SdkClient.html#source" target="_self" >SdkClient:17</a></code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/SdkClient.html#source" target="_self" >SdkClient:17</a></code>
 </div>
-                </td>
-            </tr>
+                        </td>
+                    </tr>
 
 
             <tr>
                 <td class="col-md-4">
 
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>unknown</code>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
 
-                    </div>
+                        </div>
                 </td>
             </tr>
         </tbody>
@@ -1539,8 +2361,8 @@
                 <td class="col-md-4">
                     <a name="HttpAction"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>HttpAction</b></span>
                         <a href="#HttpAction"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -1548,64 +2370,72 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>HttpAction(undefined: literal type)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>HttpAction(: { verb: "GET" | "POST" | "PATCH" | "PUT" | "DELETE"; gateway: string; baseUrl: string; authorization: string; body?: Object; message?: string; octetStream?: boolean; multiPartFormData?: boolean; additionalHeaders?: Object; noResponse?: boolean; rawResponse?: boolean; returnHeaders?: boolean; ignoreCodes?: number[] })</code>
                 </td>
             </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Inherited from         <code><a href="../classes/SdkClient.html" target="_self" >SdkClient</a></code>
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/SdkClient.html" target="_self" >SdkClient</a></code>
 </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/SdkClient.html#source" target="_self" >SdkClient:35</a></code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/SdkClient.html#source" target="_self" >SdkClient:61</a></code>
 </div>
-                </td>
-            </tr>
+                        </td>
+                    </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Performs an HTTP request to the Alteryx API through the configured authenticator.</p>
+<p>This method delegates the HTTP request to the authenticator&#39;s HttpAction method,
+which ensures that all requests are properly authenticated. The authenticator
+handles token renewal, request formatting, and error handling.</p>
+<p>This design pattern centralizes authentication logic and ensures consistent
+handling of API requests across all SDK client classes.</p>
+</div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                            <code>literal type</code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                        <code>{ verb: &quot;GET&quot; | &quot;POST&quot; | &quot;PATCH&quot; | &quot;PUT&quot; | &quot;DELETE&quot;; gateway: string; baseUrl: string; authorization: string; body?: Object; message?: string; octetStream?: boolean; multiPartFormData?: boolean; additionalHeaders?: Object; noResponse?: boolean; rawResponse?: boolean; returnHeaders?: boolean; ignoreCodes?: number[] }</code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;Object | undefined&gt;</code>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;Object | undefined&gt;</code>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                        </div>
+                            <div class="io-description">
+                                <ul>
+<li>Response data or undefined if no response expected</li>
+</ul>
+
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -1616,8 +2446,8 @@
                 <td class="col-md-4">
                     <a name="RenewToken"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>RenewToken</b></span>
                         <a href="#RenewToken"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -1625,33 +2455,33 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
                     <code>RenewToken()</code>
                 </td>
             </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Inherited from         <code><a href="../classes/SdkClient.html" target="_self" >SdkClient</a></code>
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Inherited from         <code><a href="../classes/SdkClient.html" target="_self" >SdkClient</a></code>
 </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                        <div class="io-line">Defined in         <code><a href="../classes/SdkClient.html#source" target="_self" >SdkClient:21</a></code>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">        <code><a href="../classes/SdkClient.html#source" target="_self" >SdkClient:21</a></code>
 </div>
-                </td>
-            </tr>
+                        </td>
+                    </tr>
 
 
             <tr>
                 <td class="col-md-4">
 
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>unknown</code>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>unknown</code>
 
-                    </div>
+                        </div>
                 </td>
             </tr>
         </tbody>
@@ -1662,32 +2492,64 @@
 
 
 
+
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { toQueryString } from &quot;../../utils&quot;;
 import { SDKModels } from &quot;../models&quot;;
 import { worflowDataTemplate, worflowVersionDataTemplate} from &quot;./worflow-data-template&quot;;
 import {WorkflowManagementClientV1} from &quot;./workflowV1&quot;
 
 /**
- * The Workflow Management API provides a means form managing workflows.
+ * The Workflow Management API provides a means for managing workflows in Alteryx Server.
+ * 
+ * This client extends the V1 client and implements the V3 API endpoints, providing
+ * comprehensive workflow management capabilities including:
+ * - Retrieving workflow details and listings
+ * - Creating and updating workflows
+ * - Managing workflow versions
+ * - Downloading workflow packages
+ * - Retrieving workflow questions and jobs
+ * - Deleting workflows
+ * 
  * @export
  * @extends {WorkflowManagementClientV1}
  */
  export class WorkflowManagementClient extends WorkflowManagementClientV1 {
+    /**
+     * Base URL for all V3 workflow API endpoints
+     * @private
+     */
     private _baseUrl: string &#x3D; &quot;/v3/workflows&quot;;
 
     /**
+     * Retrieves detailed information about a specific workflow by its ID.
      * 
-     * @summary Retrieve a workflow record
-     * @param {string} workflowId 
-     * @throws {RequiredError}
-     * @returns {Promise&lt;SDKModels.UserView&gt;}
+     * This method fetches comprehensive information about a workflow, including:
+     * - Basic metadata (name, description, creation date)
+     * - Owner information
+     * - Permission settings
+     * - Version information
+     * - Execution settings
+     * 
+     * This is typically used to:
+     * - Display workflow details to users
+     * - Check workflow configuration before execution
+     * - Verify workflow settings before making changes
+     * 
+     * @summary Retrieve a complete workflow record by ID
+     * @param {string} workflowId - The unique identifier of the workflow to retrieve
+     * @throws {RequiredError} - If the workflowId parameter is missing
+     * @returns {Promise&lt;SDKModels.WorkflowView&gt;} - A promise that resolves to the workflow details
      * @memberOf WorkflowManagementClient
      */
-     public async GetWorkflow(workflowId: String): Promise&lt;SDKModels.WorkflowView&gt; {
+    public async GetWorkflow(workflowId: string): Promise&lt;SDKModels.WorkflowView&gt; {
+        // verify required parameter &#x27;workflowId&#x27; is not null or undefined
+        if (workflowId &#x3D;&#x3D;&#x3D; null || workflowId &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;workflowId&#x27;,&#x27;Required parameter workflowId was null or undefined when calling GetWorkflow.&#x27;);
+        }
         return (await this.HttpAction({
             verb: &quot;GET&quot;,
             gateway: this.GetGateway(),
@@ -1698,24 +2560,167 @@ import {WorkflowManagementClientV1} from &quot;./workflowV1&quot;
     }
 
     /**
-     * @summary Retrieve all workflow records
-     * @param {{
-     *          view?: &#x27;Default&#x27; | &#x27;Full&#x27;, 
-     *          name?: string, 
-     *          ownerId?: string, 
-     *          firstName?: string, 
-     *          lastName?: string, 
-     *          createdAfter?: Date, 
-     *          createdBefore?: Date
-     *         }} [params]
-     * @param {&#x27;Default&#x27; | &#x27;Full&#x27;} [param.view] 
-     * @param {string} [param.name] Filter by Workflow name
-     * @param {string} [param.ownerId] Filter by OwnerId
-     * @param {string} [param.createdAfter] Filter on the published revision&amp;#39;s created date, inclusive
-     * @param {string} [param.createdBefore] Filter on the published revision&amp;#39;s created date, inclusive
-     * @throws {RequiredError}
-     * @returns {Promise&lt;Array&lt;SDKModels.ReducedWorkflowView&gt;&gt;}
-     *
+     * Retrieves the questions defined in a workflow.
+     * 
+     * Alteryx workflows can include questions that prompt users for input values when
+     * the workflow is executed. This method retrieves those questions, which can be used to:
+     * - Build dynamic user interfaces for workflow execution
+     * - Understand what inputs a workflow requires
+     * - Prepare data for workflow execution
+     * 
+     * Questions can include various types such as text inputs, dropdowns, file selectors,
+     * and more. Each question has properties like name, type, description, and default value.
+     * 
+     * @summary Retrieve the questions defined in a workflow
+     * @param {string} workflowId - The ID of the workflow to get questions for
+     * @param {string} [versionId] - Optional specific version ID (defaults to published version)
+     * @param {*} [options] - Optional HTTP request options
+     * @throws {RequiredError} - If the workflowId parameter is missing
+     * @returns {Promise&lt;Array&lt;SDKModels.WorkflowQuestionView&gt;&gt;} - A promise that resolves to an array of workflow questions
+     * @memberOf WorkflowManagementClient
+     */
+    public async workflowsGetWorkflowQuestions(workflowId: string, versionId?: string, options: any &#x3D; {}): Promise&lt;Array&lt;SDKModels.WorkflowQuestionView&gt;&gt; {
+        // verify required parameter &#x27;workflowId&#x27; is not null or undefined
+        if (workflowId &#x3D;&#x3D;&#x3D; null || workflowId &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;workflowId&#x27;,&#x27;Required parameter workflowId was null or undefined when calling GetWorkflowQuestions.&#x27;);
+        }
+
+        const params &#x3D; {} as any;
+        if(versionId){
+            params[&#x27;versionId&#x27;] &#x3D; versionId;
+        }
+        const qs &#x3D; toQueryString(params);
+
+        return (await this.HttpAction({
+            verb: &quot;GET&quot;,
+            gateway: this.GetGateway(),
+            authorization: await this.GetToken(),
+            baseUrl: &#x60;${this._baseUrl}/${workflowId}/questions?${qs}&#x60;,
+            message: &quot;GetWorkflow&quot;,
+            rawResponse: true
+        })) as Promise&lt;Array&lt;SDKModels.WorkflowQuestionView&gt;&gt;;
+    }
+
+    /**
+     * Retrieves the execution history (jobs) for a specific workflow.
+     * 
+     * This method returns information about past and current executions of a workflow,
+     * including status, start/end times, and execution parameters. It supports pagination
+     * and sorting to handle large numbers of job records efficiently.
+     * 
+     * Common use cases include:
+     * - Monitoring workflow execution history
+     * - Auditing workflow usage
+     * - Troubleshooting failed workflow executions
+     * - Analyzing workflow performance over time
+     * 
+     * @summary Retrieve execution history for a workflow
+     * @param {string} workflowId - The ID of the workflow to get jobs for
+     * @param {string} [sortField] - Field to sort results by (e.g., &quot;startDate&quot;, &quot;status&quot;)
+     * @param {string} [direction] - Sort direction (&quot;asc&quot; or &quot;desc&quot;)
+     * @param {string} [offset] - Pagination offset (starting record)
+     * @param {string} [limit] - Maximum number of records to return
+     * @param {*} [options] - Optional HTTP request options
+     * @throws {RequiredError} - If the workflowId parameter is missing
+     * @returns {Promise&lt;Array&lt;SDKModels.WorkflowJobView&gt;&gt;} - A promise that resolves to an array of workflow jobs
+     * @memberOf WorkflowManagementClient
+     */
+    public async GetJobsForWorkflow(workflowId: string, sortField?: string, direction?: string, offset?: string, limit?: string, options?: any): Promise&lt;Array&lt;SDKModels.WorkflowJobView&gt;&gt; {
+        // verify required parameter &#x27;workflowId&#x27; is not null or undefined
+        if (workflowId &#x3D;&#x3D;&#x3D; null || workflowId &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;workflowId&#x27;,&#x27;Required parameter workflowId was null or undefined when calling GetJobsForWorkflow.&#x27;);
+        }
+
+        const params &#x3D; {} as any;
+        if(sortField){
+            params[&#x27;sortField&#x27;] &#x3D; sortField;
+        }
+        if(direction){
+            params[&#x27;direction&#x27;] &#x3D; direction;
+        }
+        if(offset){
+            params[&#x27;offset&#x27;] &#x3D; offset;
+        }
+        if(limit){
+            params[&#x27;limit&#x27;] &#x3D; limit;
+        }
+        const qs &#x3D; toQueryString(params);
+
+        return (await this.HttpAction({
+            verb: &quot;GET&quot;,
+            gateway: this.GetGateway(),
+            authorization: await this.GetToken(),
+            baseUrl: &#x60;${this._baseUrl}/${workflowId}/jobs?${qs}&#x60;,
+            message: &quot;GetJobsForWorkflow&quot;,
+            rawResponse: true
+        })) as Promise&lt;Array&lt;SDKModels.WorkflowJobView&gt;&gt;;
+    }
+
+    /**
+     * Downloads a workflow package file from Alteryx Server.
+     * 
+     * This method retrieves the actual workflow file (.yxzp or .yxmd) that can be:
+     * - Saved to disk for backup purposes
+     * - Imported into Alteryx Designer for editing
+     * - Uploaded to another Alteryx Server instance
+     * - Used for version control or archiving
+     * 
+     * By default, this method downloads the published (active) version of the workflow.
+     * You can specify a particular version by providing the versionId parameter.
+     * 
+     * The response is a raw binary file that should be handled appropriately by the client.
+     * 
+     * @summary Download a workflow package file
+     * @param {string} workflowId - The ID of the workflow to download
+     * @param {string} [versionId] - Optional specific version ID (defaults to published version)
+     * @param {*} [options] - Optional HTTP request options
+     * @throws {RequiredError} - If the workflowId parameter is missing
+     * @returns {Promise&lt;Response&gt;} - A promise that resolves to the raw HTTP response with the file
+     * @memberOf WorkflowManagementClient
+     */
+    public async DownloadWorkflow(workflowId: string, versionId?: string, options?: any): Promise&lt;Response&gt; {
+        // verify required parameter &#x27;workflowId&#x27; is not null or undefined
+        if (workflowId &#x3D;&#x3D;&#x3D; null || workflowId &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;workflowId&#x27;,&#x27;Required parameter workflowId was null or undefined when calling DownloadWorkflow.&#x27;);
+        }
+
+        const params &#x3D; {} as any;
+        if(versionId){
+            params[&#x27;versionId&#x27;] &#x3D; versionId;
+        }
+        
+        const qs &#x3D; toQueryString(params);
+        return (await this.HttpAction({
+            verb: &quot;GET&quot;,
+            gateway: this.GetGateway(),
+            authorization: await this.GetToken(),
+            baseUrl: &#x60;${this._baseUrl}/${workflowId}/package?${qs}&#x60;,
+            message: &quot;AdminGetAppInfoV1&quot;,
+            rawResponse: true
+        })) as Response;
+    }
+
+    /**
+     * Retrieves a list of workflows with optional filtering criteria.
+     * 
+     * This method provides a powerful way to search and filter workflows based on various
+     * criteria such as name, owner, and creation date. It&#x27;s commonly used for:
+     * - Displaying workflow listings in user interfaces
+     * - Finding workflows that match specific criteria
+     * - Building workflow dashboards and reports
+     * 
+     * The method returns a reduced view of workflows by default, which includes basic
+     * information but not all details. For complete workflow information, use the &#x27;Full&#x27;
+     * view parameter or call GetWorkflow() with a specific workflow ID.
+     * 
+     * @summary Retrieve a filtered list of workflows
+     * @param {Object} [params] - Optional filtering parameters
+     * @param {&#x27;Default&#x27; | &#x27;Full&#x27;} [params.view] - Level of detail to include in results
+     * @param {string} [params.name] - Filter by workflow name (partial match)
+     * @param {string} [params.ownerId] - Filter by workflow owner ID
+     * @param {string} [params.createdAfter] - Filter for workflows created after this date (inclusive)
+     * @param {string} [params.createdBefore] - Filter for workflows created before this date (inclusive)
+     * @returns {Promise&lt;Array&lt;SDKModels.ReducedWorkflowView&gt;&gt;} - A promise that resolves to an array of workflow records
      * @memberOf WorkflowManagementClient
      */
      public async GetWorkflows(
@@ -1737,37 +2742,39 @@ import {WorkflowManagementClientV1} from &quot;./workflowV1&quot;
     }
 
     /**
-     * @summary Upload a new workflow
-     * @param {{
-     *          file: any, 
-     *          name: string, 
-     *          ownerId: string, 
-     *          isPublic: boolean, 
-     *          isReadyForMigration: boolean, 
-     *          othersMayDownload: boolean, 
-     *          othersCanExecute: boolean, 
-     *          executionMode: string, 
-     *          workerTag?: string, 
-     *          districtTags?: string, 
-     *          comments?: string, 
-     *          sourceAppId?: string, 
-     *          hasPrivateDataExemption?: boolean
-     *        }} [params]
-     * @param {any} [param.file]
-    * @param {string} [param.name] 
-    * @param {string} [param.ownerId] 
-    * @param {boolean} [param.isPublic]  
-    * @param {boolean} [param.isReadyForMigration]   
-    * @param {boolean} [param.othersMayDownload]  
-    * @param {boolean} [param.othersCanExecute]  
-    * @param {string} [param.executionMode]    Accepted values are &quot;Safe&quot;, &quot;SemiSafe&quot;, &quot;Standard&quot;, 
-    * @param {string} [param.workerTag] 
-    * @param {string} [param.istrictTags]  Submit as JSON formatted array. IE: [\&amp;quot;id1\&amp;quot;, \&amp;quot;id2\&amp;quot;]
-    * @param {string} [param.comments] 
-    * @param {string} [param.sourceAppId] 
-    * @param {boolean} [param.hasPrivateDataExemption]
-     * @returns {Promise&lt;String&gt;}
-     *
+     * Creates a new workflow in Alteryx Server by uploading a workflow package file
+     * along with metadata and permission settings.
+     * 
+     * This method handles the complex process of uploading a workflow file and configuring
+     * its properties, including:
+     * - Basic metadata (name, owner, comments)
+     * - Permission settings (public access, execution rights, download rights)
+     * - Execution configuration (execution mode, credential requirements)
+     * - Collection assignments
+     * - Worker and district tags for execution routing
+     * 
+     * The workflow file should be an Alteryx workflow package (.yxzp or .yxmd file).
+     * 
+     * @summary Upload a new workflow to Alteryx Server
+     * @param {Object} params - The workflow configuration parameters
+     * @param {any} params.file - The workflow file to upload (.yxzp or .yxmd)
+     * @param {string} params.name - The name for the workflow
+     * @param {string} params.ownerId - The ID of the user who will own the workflow
+     * @param {boolean} params.isPublic - Whether the workflow is publicly visible
+     * @param {boolean} params.isReadyForMigration - Whether the workflow is ready for migration
+     * @param {boolean} params.othersMayDownload - Whether others can download the workflow
+     * @param {boolean} params.othersCanExecute - Whether others can execute the workflow
+     * @param {string} params.executionMode - Security level for execution (&quot;Safe&quot;, &quot;SemiSafe&quot;, &quot;Standard&quot;)
+     * @param {string} params.workflowCredentialType - Credential requirement (&quot;Default&quot;, &quot;Required&quot;, &quot;Specific&quot;)
+     * @param {string} [params.workerTag] - Optional tag for worker selection
+     * @param {string} [params.districtTags] - Optional district tags as JSON array
+     * @param {string} [params.comments] - Optional comments about the workflow
+     * @param {string} [params.sourceAppId] - Optional source application ID
+     * @param {boolean} [params.hasPrivateDataExemption] - Optional private data exemption flag
+     * @param {string} [params.credentialId] - Optional credential ID (required if workflowCredentialType is &quot;Specific&quot;)
+     * @param {string[]} [params.collectionIds] - Optional collection IDs to add the workflow to
+     * @returns {Promise&lt;String&gt;} - A promise that resolves to the ID of the created workflow
+     * @throws {RequiredError} - If any required parameters are missing
      * @memberOf WorkflowManagementClient
      */
      public async CreateWorkflow(
@@ -1779,14 +2786,58 @@ import {WorkflowManagementClientV1} from &quot;./workflowV1&quot;
             isReadyForMigration: boolean, 
             othersMayDownload: boolean, 
             othersCanExecute: boolean, 
-            executionMode: string, 
+            executionMode: string,
+            workflowCredentialType: string,
             workerTag?: string, 
             districtTags?: string, 
             comments?: string, 
             sourceAppId?: string, 
-            hasPrivateDataExemption?: boolean
+            hasPrivateDataExemption?: boolean,
+            credentialId?: string,
+            collectionIds?: string[]
            }
-    ): Promise&lt;String&gt; {
+    ): Promise&lt;string&gt; {
+        // verify required parameter &#x27;params&#x27; is not null or undefined
+        if (params &#x3D;&#x3D;&#x3D; null || params &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;params&#x27;,&#x27;Required parameter params was null or undefined when calling CreateWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;file&#x27; is not null or undefined
+        if (params.file &#x3D;&#x3D;&#x3D; null || params.file &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;file&#x27;,&#x27;Required parameter file was null or undefined when calling workflowsCreateWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;name&#x27; is not null or undefined
+        if (params.name &#x3D;&#x3D;&#x3D; null || params.name &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;name&#x27;,&#x27;Required parameter name was null or undefined when calling workflowsCreateWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;ownerId&#x27; is not null or undefined
+        if (params.ownerId &#x3D;&#x3D;&#x3D; null || params.ownerId &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;ownerId&#x27;,&#x27;Required parameter ownerId was null or undefined when calling workflowsCreateWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;isPublic&#x27; is not null or undefined
+        if (params.isPublic &#x3D;&#x3D;&#x3D; null || params.isPublic &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;isPublic&#x27;,&#x27;Required parameter isPublic was null or undefined when calling workflowsCreateWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;isReadyForMigration&#x27; is not null or undefined
+        if (params.isReadyForMigration &#x3D;&#x3D;&#x3D; null || params.isReadyForMigration &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;isReadyForMigration&#x27;,&#x27;Required parameter isReadyForMigration was null or undefined when calling workflowsCreateWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;othersMayDownload&#x27; is not null or undefined
+        if (params.othersMayDownload &#x3D;&#x3D;&#x3D; null || params.othersMayDownload &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;othersMayDownload&#x27;,&#x27;Required parameter othersMayDownload was null or undefined when calling workflowsCreateWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;othersCanExecute&#x27; is not null or undefined
+        if (params.othersCanExecute &#x3D;&#x3D;&#x3D; null || params.othersCanExecute &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;othersCanExecute&#x27;,&#x27;Required parameter othersCanExecute was null or undefined when calling workflowsCreateWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;executionMode&#x27; is not null or undefined
+        if (params.executionMode &#x3D;&#x3D;&#x3D; null || params.executionMode &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;executionMode&#x27;,&#x27;Required parameter executionMode was null or undefined when calling workflowsCreateWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;workflowCredentialType&#x27; is not null or undefined
+        if (params.workflowCredentialType &#x3D;&#x3D;&#x3D; null || params.workflowCredentialType &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;workflowCredentialType&#x27;,&#x27;Required parameter workflowCredentialType was null or undefined when calling workflowsCreateWorkflow.&#x27;);
+        }
+
         return (await this.HttpAction({
             verb: &quot;POST&quot;,
             gateway: this.GetGateway(),
@@ -1796,53 +2847,95 @@ import {WorkflowManagementClientV1} from &quot;./workflowV1&quot;
             body: worflowDataTemplate(params),
             multiPartFormData: true,
             //additionalHeaders: { enctype: &quot;multipart/form-data&quot; },
-        })) as String;
+        })) as string;
     }
 
     /**
+     * Adds a new version to an existing workflow by uploading a new workflow package file.
      * 
-     * @summary Upload a new workflow
-     * @param {{
-     *          file?: any, 
-     *          name: string, 
-     *          ownerId: string, 
-     *          othersMayDownload: boolean, 
-     *          othersCanExecute: boolean, 
-     *          executionMode: string, 
-     *          makePublished?: boolean, 
-     *          comments?: string, 
-     *          sourceAppId?: string, 
-     *          hasPrivateDataExemption?: boolean
-     *         }} [params]
-     * @param {any} [param.file]
-    * @param {string} [param.name] 
-    * @param {string} [param.ownerId]   
-    * @param {boolean} [param.othersMayDownload]  
-    * @param {boolean} [param.othersCanExecute]  
-    * @param {string} [param.executionMode]    Accepted values are \&amp;quot;Safe\&amp;quot;, \&amp;quot;SemiSafe\&amp;quot;, \&amp;quot;Standard\&amp;quot;, 
-    * @param {boolean} [param.makePublished] 
-    * @param {string} [param.comments] 
-    * @param {string} [param.sourceAppId] 
-    * @param {boolean} [param.hasPrivateDataExemption]
-     * @returns {Promise&lt;SDKModels.WorkflowView&gt;}
-     *
+     * This method enables versioning of workflows, allowing for:
+     * - Updating workflows with new functionality
+     * - Maintaining multiple versions of the same workflow
+     * - Optionally publishing the new version as the current active version
+     * 
+     * Versioning is a key feature for workflow management as it allows for:
+     * - Testing new versions without affecting production
+     * - Rolling back to previous versions if issues are found
+     * - Maintaining an audit trail of workflow changes
+     * 
+     * @summary Add a new version to an existing workflow
+     * @param {string} workflowId - The ID of the existing workflow to add a version to
+     * @param {Object} params - The version configuration parameters
+     * @param {any} params.file - The workflow file to upload (.yxzp or .yxmd)
+     * @param {string} params.name - The name for this version of the workflow
+     * @param {string} params.ownerId - The ID of the user who will own this version
+     * @param {boolean} params.othersMayDownload - Whether others can download this version
+     * @param {boolean} params.othersCanExecute - Whether others can execute this version
+     * @param {string} params.executionMode - Security level for execution (&quot;Safe&quot;, &quot;SemiSafe&quot;, &quot;Standard&quot;)
+     * @param {boolean} params.makePublished - Whether to make this the published (active) version
+     * @param {string} params.workflowCredentialType - Credential requirement (&quot;Default&quot;, &quot;Required&quot;, &quot;Specific&quot;)
+     * @param {string} [params.comments] - Optional comments about this version
+     * @param {string} [params.sourceAppId] - Optional source application ID
+     * @param {boolean} [params.hasPrivateDataExemption] - Optional private data exemption flag
+     * @param {string} [params.credentialId] - Optional credential ID (required if workflowCredentialType is &quot;Specific&quot;)
+     * @returns {Promise&lt;SDKModels.WorkflowView&gt;} - A promise that resolves to the updated workflow with the new version
+     * @throws {RequiredError} - If any required parameters are missing
      * @memberOf WorkflowManagementClient
      */
      public async AddVersionToWorkflow(
         workflowId: string,
         params: {
-            file?: any, 
+            file: any, 
             name: string, 
             ownerId: string, 
             othersMayDownload: boolean, 
             othersCanExecute: boolean, 
             executionMode: string, 
-            makePublished?: boolean, 
+            makePublished: boolean, 
             comments?: string, 
             sourceAppId?: string, 
-            hasPrivateDataExemption?: boolean
+            hasPrivateDataExemption?: boolean,
+            workflowCredentialType: string,
+            credentialId?: string
            }
     ): Promise&lt;SDKModels.WorkflowView&gt; {
+        // verify required parameter &#x27;params&#x27; is not null or undefined
+        if (params &#x3D;&#x3D;&#x3D; null || params &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;params&#x27;,&#x27;Required parameter params was null or undefined when calling AddVersionToWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;file&#x27; is not null or undefined
+        if (params.file &#x3D;&#x3D;&#x3D; null || params.file &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;file&#x27;,&#x27;Required parameter file was null or undefined when calling AddVersionToWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;name&#x27; is not null or undefined
+        if (params.name &#x3D;&#x3D;&#x3D; null || params.name &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;name&#x27;,&#x27;Required parameter name was null or undefined when calling AddVersionToWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;ownerId&#x27; is not null or undefined
+        if (params.ownerId &#x3D;&#x3D;&#x3D; null || params.ownerId &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;ownerId&#x27;,&#x27;Required parameter ownerId was null or undefined when calling AddVersionToWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;othersMayDownload&#x27; is not null or undefined
+        if (params.othersMayDownload &#x3D;&#x3D;&#x3D; null || params.othersMayDownload &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;othersMayDownload&#x27;,&#x27;Required parameter othersMayDownload was null or undefined when calling AddVersionToWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;othersCanExecute&#x27; is not null or undefined
+        if (params.othersCanExecute &#x3D;&#x3D;&#x3D; null || params.othersCanExecute &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;othersCanExecute&#x27;,&#x27;Required parameter othersCanExecute was null or undefined when calling AddVersionToWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;executionMode&#x27; is not null or undefined
+        if (params.executionMode &#x3D;&#x3D;&#x3D; null || params.executionMode &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;executionMode&#x27;,&#x27;Required parameter executionMode was null or undefined when calling AddVersionToWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;makePublished&#x27; is not null or undefined
+        if (params.makePublished &#x3D;&#x3D;&#x3D; null || params.makePublished &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;makePublished&#x27;,&#x27;Required parameter makePublished was null or undefined when calling AddVersionToWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;workflowCredentialType&#x27; is not null or undefined
+        if (params.workflowCredentialType &#x3D;&#x3D;&#x3D; null || params.workflowCredentialType &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;workflowCredentialType&#x27;,&#x27;Required parameter workflowCredentialType was null or undefined when calling AddVersionToWorkflow.&#x27;);
+        }
+
         return (await this.HttpAction({
             verb: &quot;POST&quot;,
             gateway: this.GetGateway(),
@@ -1856,12 +2949,24 @@ import {WorkflowManagementClientV1} from &quot;./workflowV1&quot;
     }
 
     /**
+     * Permanently deletes a workflow from Alteryx Server.
      * 
-     * @summary Delete a specific workflow
-     * @param {string} workflowId id of workflow to delete
-     * @param {boolean} [force] if workflow is scheduled forcing will delete all schedules before deleting
-     * @returns {Promise&lt;Response&gt;}
-     *
+     * This method removes a workflow and all its versions from the server. This is a
+     * destructive operation that cannot be undone, so it should be used with caution.
+     * 
+     * If the workflow is associated with schedules, the operation will fail by default.
+     * Setting the force parameter to true will delete all associated schedules before
+     * deleting the workflow.
+     * 
+     * Common use cases include:
+     * - Removing obsolete or unused workflows
+     * - Cleaning up test workflows
+     * - Removing workflows that have been migrated to other systems
+     * 
+     * @summary Permanently delete a workflow and all its versions
+     * @param {string} workflowId - The ID of the workflow to delete
+     * @param {boolean} [force&#x3D;false] - Whether to force deletion by removing associated schedules
+     * @returns {Promise&lt;Response&gt;} - A promise that resolves when the workflow is deleted
      * @memberOf WorkflowManagementClient
      */
      public async DeleteWorkflow(
@@ -1880,18 +2985,38 @@ import {WorkflowManagementClientV1} from &quot;./workflowV1&quot;
     }
 
     /**
-     * To change the ownerId, the new owner must be in the same subscription as the current owner.
-     * @summary Update an existing workflow
-     * @param {string} workflowId 
-     * @param {UpdateWorkflowContract} updateWorkflowContract          
-     * @returns {Promise&lt;SDKModels.WorkflowView&gt;}
-     *
+     * Updates the metadata and settings of an existing workflow.
+     * 
+     * This method allows modifying various aspects of a workflow without uploading a new
+     * workflow file or creating a new version. It&#x27;s commonly used to:
+     * - Change the workflow name or description
+     * - Update permission settings
+     * - Transfer ownership to another user
+     * - Modify execution settings
+     * 
+     * Note: To change the workflow owner (ownerId), the new owner must be in the same
+     * subscription as the current owner. This restriction ensures that workflows remain
+     * within their licensing boundaries.
+     * 
+     * @summary Update metadata and settings of an existing workflow
+     * @param {string} workflowId - The ID of the workflow to update
+     * @param {UpdateWorkflowContract} updateWorkflowContract - The updated workflow properties
+     * @returns {Promise&lt;SDKModels.WorkflowView&gt;} - A promise that resolves to the updated workflow
+     * @throws {RequiredError} - If any required parameters are missing
      * @memberOf WorkflowManagementClient
      */
      public async UpdateWorkflow(
         workflowId: string, 
         updateWorkflowContract: SDKModels.UpdateWorkflowContract
     ): Promise&lt;SDKModels.WorkflowView&gt; {
+        // verify required parameter &#x27;workflowId&#x27; is not null or undefined
+        if (workflowId &#x3D;&#x3D;&#x3D; null || workflowId &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;workflowId&#x27;,&#x27;Required parameter workflowId was null or undefined when calling UpdateWorkflow.&#x27;);
+        }
+        // verify required parameter &#x27;updateWorkflowContract&#x27; is not null or undefined
+        if (updateWorkflowContract &#x3D;&#x3D;&#x3D; null || updateWorkflowContract &#x3D;&#x3D;&#x3D; undefined) {
+            throw new SDKModels.RequiredError(&#x27;updateWorkflowContract&#x27;,&#x27;Required parameter updateWorkflowContract was null or undefined when calling UpdateWorkflow.&#x27;);
+        }
         return (await this.HttpAction({
             verb: &quot;PUT&quot;,
             gateway: this.GetGateway(),
@@ -1901,7 +3026,8 @@ import {WorkflowManagementClientV1} from &quot;./workflowV1&quot;
             body: updateWorkflowContract,
         })) as SDKModels.WorkflowView;
     }
-}</code></pre>
+}
+</code></pre>
     </div>
 </div>
 
@@ -1943,18 +3069,47 @@ import {WorkflowManagementClientV1} from &quot;./workflowV1&quot;
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
 
        <script src="../js/menu-wc.js" defer></script>
-       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 
        <script src="../js/libs/es6-shim.min.js"></script>
        <script src="../js/libs/EventDispatcher.js"></script>
        <script src="../js/libs/promise.min.js"></script>
-       <script src="../js/libs/zepto.min.js"></script>
 
        <script src="../js/compodoc.js"></script>
 

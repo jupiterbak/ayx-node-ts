@@ -13,19 +13,91 @@
         <link rel="stylesheet" href="../styles/material.css">
     </head>
     <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="../" class="navbar-brand">@jupiterbak/ayx-node</a>
-            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">@jupiterbak/ayx-node</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
         </div>
 
         <div class="xs-menu menu" id="mobile-menu">
-                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
         </div>
 
         <div class="container-fluid main">
            <div class="row main">
-               <div class="hidden-xs menu">
+               <div class="d-none d-md-block menu">
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
@@ -43,94 +115,142 @@
 
 
 
+
+
+
+
 <ol class="breadcrumb">
-  <li>Classes</li>
-  <li >AlteryxConnectBase</li>
+  <li class="breadcrumb-item">Classes</li>
+  <li class="breadcrumb-item" >AlteryxConnectBase</li>
 </ol>
 
+<div class="io-file io-file-path" data-compodoc="entity-file-path">
+    <span class="icon ion-ios-document" aria-hidden="true"></span>
+    <code>src/api/alteryx-base.ts</code>
+</div>
+
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#api" 
+                class="nav-link"
+                
+                role="tab" id="api-tab" data-bs-toggle="tab" data-link="api">API</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" 
+                class="nav-link"
+                
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
-        <p class="comment">
-            <h3>File</h3>
-        </p>
-        <p class="comment">
-            <code>src/api/alteryx-base.ts</code>
-        </p>
-
+    <div class="tab-pane fade active in" id="info">
 
             <p class="comment">
                 <h3>Description</h3>
             </p>
             <p class="comment">
                 <p>Base class for alteryx agent (and setup) which provides headers and proxy handling.</p>
+<p>AlteryxConnectBase</p>
 
             </p>
 
 
 
 
-            <section>
+                <section data-compodoc="block-relationships">
+            <h3>Relationships</h3>
+
+            <div class="row pt-3">
+                <div class="col-sm-6">
+                    <h4>Used by</h4>
+                        <ul class="list-unstyled relationships-list">
+                                <li>
+                                            <code><a href="../classes/AuthBase.html" target="_self" >AuthBase</a></code>
+                                </li>
+                                <li>
+                                            <code><a href="../classes/UserAuth.html" target="_self" >UserAuth</a></code>
+                                </li>
+                        </ul>
+                </div>
+
+                <div class="col-sm-6">
+                    <h4>Depends on</h4>
+                        <p class="comment"><i>No results matching.</i></p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="tab-pane fade " id="api">
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
-    <table class="table table-sm table-bordered index-table">
-        <tbody>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
                 <tr>
-                    <td class="col-md-4">
+                    <td class="col-md-3">
                         <h6><b>Properties</b></h6>
                     </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
+                    <td class="col-md-9">
                         <ul class="index-list">
                             <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                     <span class="modifier">Protected</span>
                                 <a href="#_apiHeaders" >_apiHeaders</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                     <span class="modifier">Protected</span>
                                 <a href="#_headers" >_headers</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                     <span class="modifier">Protected</span>
                                 <a href="#_multipartFormData" >_multipartFormData</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                     <span class="modifier">Protected</span>
                                 <a href="#_multipartHeaders" >_multipartHeaders</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                     <span class="modifier">Protected</span>
                                 <a href="#_octetStreamHeaders" >_octetStreamHeaders</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                     <span class="modifier">Protected</span>
                                 <a href="#_proxyHttpAgent" >_proxyHttpAgent</a>
                             </li>
                             <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
                                     <span class="modifier">Protected</span>
                                 <a href="#_urlEncodedHeaders" >_urlEncodedHeaders</a>
                             </li>
                         </ul>
                     </td>
                 </tr>
+            </tbody>
+        </table>
 
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
                 <tr>
-                    <td class="col-md-4">
+                    <td class="col-md-3">
                         <h6><b>Methods</b></h6>
                     </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
+                    <td class="col-md-9">
                         <ul class="index-list">
                             <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#HttpAction" >HttpAction</a>
@@ -138,16 +258,16 @@
                         </ul>
                     </td>
                 </tr>
+            </tbody>
+        </table>
 
 
 
 
 
-        </tbody>
-    </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
@@ -158,7 +278,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="281" class="link-to-prism">src/api/alteryx-base.ts:281</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="335" class="link-to-prism">src/api/alteryx-base.ts:335</a></div>
                             </td>
                         </tr>
 
@@ -166,7 +286,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-properties">
     
     <h3 id="inputs">
         Properties
@@ -199,13 +319,14 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="143" class="link-to-prism">src/api/alteryx-base.ts:143</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="157" class="link-to-prism">src/api/alteryx-base.ts:157</a></div>
                         </td>
                     </tr>
 
             <tr>
                 <td class="col-md-4">
                     <div class="io-description"><p>Http headers used for onboarding message.</p>
+<p>AlteryxConnectBase</p>
 </div>
                 </td>
             </tr>
@@ -241,7 +362,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="115" class="link-to-prism">src/api/alteryx-base.ts:115</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="129" class="link-to-prism">src/api/alteryx-base.ts:129</a></div>
                         </td>
                     </tr>
 
@@ -276,7 +397,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="132" class="link-to-prism">src/api/alteryx-base.ts:132</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="146" class="link-to-prism">src/api/alteryx-base.ts:146</a></div>
                         </td>
                     </tr>
 
@@ -311,13 +432,14 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="127" class="link-to-prism">src/api/alteryx-base.ts:127</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="141" class="link-to-prism">src/api/alteryx-base.ts:141</a></div>
                         </td>
                     </tr>
 
             <tr>
                 <td class="col-md-4">
                     <div class="io-description"><p>Http headers used for /exchange endpoint handling.</p>
+<p>AlteryxConnectBase</p>
 </div>
                 </td>
             </tr>
@@ -352,7 +474,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="148" class="link-to-prism">src/api/alteryx-base.ts:148</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="162" class="link-to-prism">src/api/alteryx-base.ts:162</a></div>
                         </td>
                     </tr>
 
@@ -379,13 +501,14 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="113" class="link-to-prism">src/api/alteryx-base.ts:113</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="127" class="link-to-prism">src/api/alteryx-base.ts:127</a></div>
                         </td>
                     </tr>
 
             <tr>
                 <td class="col-md-4">
                     <div class="io-description"><p>This is a https proxy agent which is used in the fetch commands if the HTTP_PROXY variable is configured.</p>
+<p>AlteryxConnectBase</p>
 </div>
                 </td>
             </tr>
@@ -420,13 +543,14 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="159" class="link-to-prism">src/api/alteryx-base.ts:159</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="173" class="link-to-prism">src/api/alteryx-base.ts:173</a></div>
                         </td>
                     </tr>
 
             <tr>
                 <td class="col-md-4">
                     <div class="io-description"><p>Http headers used to register the client assertion and acquire the /exchange token.</p>
+<p>AlteryxConnectBase</p>
 </div>
                 </td>
             </tr>
@@ -435,7 +559,7 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -446,8 +570,8 @@
                 <td class="col-md-4">
                     <a name="HttpAction"></a>
                     <span class="name">
-                        <span class="modifier">Public</span>
-                        <span class="modifier">Async</span>
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>HttpAction</b></span>
                         <a href="#HttpAction"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -455,87 +579,80 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>HttpAction(undefined: literal type)</code>
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>HttpAction(: { verb: "GET" | "POST" | "PATCH" | "PUT" | "DELETE"; gateway: string; baseUrl: string; authorization: string; body?: Object; message?: string; octetStream?: boolean; multiPartFormData?: boolean; additionalHeaders?: Object; noResponse?: boolean; rawResponse?: boolean; returnHeaders?: boolean; ignoreCodes?: number[] })</code>
                 </td>
             </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="200"
-                            class="link-to-prism">src/api/alteryx-base.ts:200</a></div>
-                </td>
-            </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="235"
+                                    class="link-to-prism">src/api/alteryx-base.ts:235</a></div>
+                        </td>
+                    </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>perform http action</p>
-<div><pre class="line-numbers"><code class="language-none">    verb: &quot;GET&quot; | &quot;POST&quot; | &quot;PATCH&quot; | &quot;PUT&quot; | &quot;DELETE&quot;;
-    gateway: string;
-    baseUrl: string;
-    authorization: string;
-    body?: Object;
-    message?: string;
-    octetStream?: boolean;
-    multiPartFormData?: boolean;
-    additionalHeaders?: Object;
-    noResponse?: boolean;
-    rawResponse?: boolean;
-    returnHeaders?: boolean;
-    ignoreCodes?: number[];
-})} {
-    verb,
-    gateway,
-    baseUrl,
-    authorization,
-    body,
-    message,
-    octetStream,
-    multiPartFormData,
-    additionalHeaders,
-    noResponse,
-    rawResponse,
-    returnHeaders,
-    ignoreCodes,
-}</code></pre></div></div>
+                        <div class="io-description"><p>Performs an HTTP request with comprehensive options for different API scenarios.
+This method handles all HTTP communication with the Alteryx API, supporting various
+content types, response formats, and error handling strategies.</p>
+</div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                            <code>literal type</code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>[object Object]</td>
+                                            <td>
+                                                        <code>{ verb: &quot;GET&quot; | &quot;POST&quot; | &quot;PATCH&quot; | &quot;PUT&quot; | &quot;DELETE&quot;; gateway: string; baseUrl: string; authorization: string; body?: Object; message?: string; octetStream?: boolean; multiPartFormData?: boolean; additionalHeaders?: Object; noResponse?: boolean; rawResponse?: boolean; returnHeaders?: boolean; ignoreCodes?: number[] }</code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Promise&lt;Object | undefined&gt;</code>
+                                            <td>
+                                                    <p>{
+verb,
+gateway,
+baseUrl,
+authorization,
+body,
+message,
+octetStream,
+multiPartFormData,
+additionalHeaders,
+noResponse,
+rawResponse,
+returnHeaders,
+ignoreCodes,
+}</p>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;Object | undefined&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -546,15 +663,16 @@
 
 
 
+
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
+    <div class="tab-pane fade  tab-source-code" id="source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import fetch from &quot;cross-fetch&quot;;
-import * as debug from &quot;debug&quot;;
+import debug from &quot;debug&quot;;
 import { removeUndefined, throwError } from &quot;./utils&quot;;
 import { AYX_NAME, AYX_VERSION } from &quot;../version&quot;;
-const HttpsProxyAgent &#x3D; require(&quot;https-proxy-agent&quot;);
+import { HttpsProxyAgent } from &quot;https-proxy-agent&quot;;
 const log &#x3D; debug(&quot;ayx-node&quot;);
 
 /**
@@ -631,9 +749,23 @@ export interface TokenRotation {
     }): Promise&lt;Object | undefined&gt;;
 }
 
+/**
+ * Type guard function to check if an object implements the TokenRotation interface.
+ * This function performs a comprehensive check to ensure the object has all required
+ * methods of the TokenRotation interface and that they are actually functions.
+ * 
+ * This is used primarily in the SdkClient constructor to determine the type of
+ * authentication mechanism provided.
+ * 
+ * @param {any} obj - The object to check
+ * @returns {boolean} - True if the object implements TokenRotation, false otherwise
+ */
 export function isTokenRotation(obj: any): boolean {
     const tr &#x3D; obj as TokenRotation;
 
+    // First check if all required properties exist
+    // Then verify the object is actually an object instance
+    // Finally ensure all properties are functions (not just properties with the same names)
     return (
         tr.GetGateway !&#x3D;&#x3D; undefined &amp;&amp;
         tr.GetTenant !&#x3D;&#x3D; undefined &amp;&amp;
@@ -749,6 +881,27 @@ export abstract class AlteryxConnectBase {
      *
      * @memberOf AlteryxConnectBase
      */
+    /**
+     * Performs an HTTP request with comprehensive options for different API scenarios.
+     * This method handles all HTTP communication with the Alteryx API, supporting various
+     * content types, response formats, and error handling strategies.
+     * 
+     * @param {Object} options - The HTTP request configuration
+     * @param {string} options.verb - HTTP method (GET, POST, PATCH, PUT, DELETE)
+     * @param {string} options.gateway - Base URL of the API gateway
+     * @param {string} options.baseUrl - Endpoint path to append to the gateway URL
+     * @param {string} options.authorization - Authorization token for the request
+     * @param {Object} [options.body] - Request body for POST, PUT, PATCH requests
+     * @param {string} [options.message] - Descriptive message for logging purposes
+     * @param {boolean} [options.octetStream] - Whether to use octet-stream content type (for binary data)
+     * @param {boolean} [options.multiPartFormData] - Whether to use multipart/form-data content type
+     * @param {Object} [options.additionalHeaders] - Additional HTTP headers to include
+     * @param {boolean} [options.noResponse] - Whether to expect no response body
+     * @param {boolean} [options.rawResponse] - Whether to return the raw response object
+     * @param {boolean} [options.returnHeaders] - Whether to return response headers instead of body
+     * @param {number[]} [options.ignoreCodes] - HTTP status codes to ignore as errors
+     * @returns {Promise&lt;Object | undefined&gt;} - Response data or undefined if no response expected
+     */
     public async HttpAction({
         verb,
         gateway,
@@ -778,6 +931,7 @@ export abstract class AlteryxConnectBase {
         returnHeaders?: boolean;
         ignoreCodes?: number[];
     }): Promise&lt;Object | undefined&gt; {
+        // Initialize default values and prepare headers
         additionalHeaders &#x3D; additionalHeaders || {};
         let apiheaders &#x3D; octetStream ? this._octetStreamHeaders : this._apiHeaders;
         apiheaders &#x3D; multiPartFormData ? this._multipartFormData : apiheaders;
@@ -787,35 +941,51 @@ export abstract class AlteryxConnectBase {
             Authorization: &#x60;Bearer ${authorization}&#x60;,
         };
 
+        // Remove Content-Type for GET and DELETE requests as they don&#x27;t have a body
+        // This prevents potential issues with some API servers
         if (verb &#x3D;&#x3D;&#x3D; &quot;GET&quot; || verb &#x3D;&#x3D;&#x3D; &quot;DELETE&quot;) {
             delete headers[&quot;Content-Type&quot;];
         }
 
+        // Merge and clean up headers, removing any undefined values
         headers &#x3D; removeUndefined({ ...headers, ...additionalHeaders });
 
+        // Construct the full URL by combining gateway and endpoint path
         const url &#x3D; &#x60;${gateway}${baseUrl}&#x60;;
         log(&#x60;${message} Headers ${JSON.stringify(headers)} Url ${url}&#x60;);
         try {
+            // Prepare the request object with method, headers and proxy agent if configured
             const request: any &#x3D; { method: verb, headers: headers, agent: this._proxyHttpAgent };
+            
+            // Add body for non-GET/DELETE requests, handling different content types appropriately
             if (verb !&#x3D;&#x3D; &quot;GET&quot; &amp;&amp; verb !&#x3D;&#x3D; &quot;DELETE&quot;) {
+                // For octet-stream or multipart/form-data, use the body as-is
+                // For JSON requests, stringify the body object
                 request.body &#x3D; octetStream || multiPartFormData ? body : JSON.stringify(body);
-                // const fs &#x3D; require(&#x27;fs&#x27;);
-                // fs.writeFileSync(&quot;BodyFile.txt&quot;, request.body)
             }
+            
+            // Execute the HTTP request
             const response &#x3D; await fetch(url, request);
 
+            // Check if the response status code is in the ignore list
             const codeIgnored &#x3D; ignoreCodes.indexOf(response.status) &gt;&#x3D; 0;
 
+            // Handle error responses unless the status code is in the ignore list
+            // First check throws an error with the response text for non-OK responses
             !codeIgnored &amp;&amp; !response.ok &amp;&amp; throwError(&#x60;${response.statusText} ${await response.text()}&#x60;);
 
+            // Second check ensures status is in the 200-299 range (success codes)
             !codeIgnored &amp;&amp;
                 (response.status &lt; 200 || response.status &gt; 299) &amp;&amp;
                 throwError(&#x60;invalid response ${JSON.stringify(response)}&#x60;);
 
+            // If status code is in ignore list, return undefined as specified
             if (codeIgnored) return undefined;
 
+            // Return the raw response object if requested
             if (rawResponse) return response;
 
+            // Handle cases where no response body is expected
             if (noResponse) {
                 if (returnHeaders) {
                     return response.headers;
@@ -823,10 +993,12 @@ export abstract class AlteryxConnectBase {
                 return {};
             }
 
+            // Parse and return the JSON response for normal requests
             const json &#x3D; await response.json();
             log(&#x60;${message} Response ${JSON.stringify(json)}&#x60;);
             return json;
         } catch (err) {
+            // Log and rethrow network errors with a more descriptive message
             log(err);
             throw new Error(&#x60;Network error occured ${err.message}&#x60;);
         }
@@ -880,18 +1052,47 @@ export abstract class AlteryxConnectBase {
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
 
        <script src="../js/menu-wc.js" defer></script>
-       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 
        <script src="../js/libs/es6-shim.min.js"></script>
        <script src="../js/libs/EventDispatcher.js"></script>
        <script src="../js/libs/promise.min.js"></script>
-       <script src="../js/libs/zepto.min.js"></script>
 
        <script src="../js/compodoc.js"></script>
 
