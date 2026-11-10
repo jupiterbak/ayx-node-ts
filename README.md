@@ -9,17 +9,14 @@
 
 <!-- markdownlint-enableMD033 -->
 
-[![Build](https://github.com/jupiterbak/ayx-node/actions/workflows/build.yml/badge.svg)](https://github.com/jupiterbak/ayx-node/actions/workflows/build.yml) [![The MIT License](https://img.shields.io/github/license/jupiterbak/ayx-node)](./LICENSE.md)
+[![Build](https://github.com/jupiterbak/ayx-node-ts/actions/workflows/build.yml/badge.svg)](https://github.com/jupiterbak/ayx-node-ts/actions/workflows/build.yml) [![The MIT License](https://img.shields.io/github/license/jupiterbak/ayx-node-ts)](./LICENSE.md)
 [![npm](https://img.shields.io/npm/v/@jupiterbak/ayx-node/latest.svg?style=flat)](https://www.npmjs.com/package/@jupiterbak/ayx-node) ![downloads](https://img.shields.io/npm/dw/@jupiterbak/ayx-node.svg?colorB=009999)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/jupiterbak/ayx-node.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jupiterbak/ayx-node/alerts/)
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/jupiterbak/ayx-node.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/jupiterbak/ayx-node/context:javascript)
-[![GitHub release](https://img.shields.io/github/release/jupiterbak/ayx-node.svg)](https://github.com/jupiterbak/ayx-node/releases/latest)
+[![GitHub release](https://img.shields.io/github/release/jupiterbak/ayx-node-ts.svg)](https://github.com/jupiterbak/ayx-node-ts/releases/latest)
 
 </p>
 
 The repository implements a typescript SDK which can be used to interact with the Alteryx Server APIs. It is compatible with linux, windows and MacOS. It supports both frontend (browser e.g. angular, react...) and backend development in node.js.
 
-[![SDK](https://img.shields.io/badge/SDK-full%20documentation-%23009999.svg)](https://jupiterbak.github.io/ayx-node/)
 
 
 ## Quick Links
@@ -27,12 +24,12 @@ The repository implements a typescript SDK which can be used to interact with th
 | what          | where                                                                                                   |
 | ------------- | ------------------------------------------------------------------------------------------------------- |
 | documentation | coming soon                                  |
-| generated api-doc       | [jupiterbak.github.io/ayx-node](https://jupiterbak.github.io/ayx-node/)                |
+| generated api-doc | [docs/](https://github.com/jupiterbak/ayx-node-ts/tree/main/docs) (build locally with `npm run doc`) |
 | npm package   | [@jupiterbak/ayx-node](https://www.npmjs.com/package/@jupiterbak/ayx-node)                                  |
-| source        | [https://github.com/jupiterbak/ayx-node](https://github.com/jupiterbak/ayx-node)                |
-| changelog     | [CHANGELOG.md](https://github.com/jupiterbak/ayx-node/blob/HEAD/CHANGELOG.md)                           |
-| contributing  | [CONTRIBUTING.md](https://github.com/jupiterbak/ayx-node/blob/HEAD/CONTRIBUTING.md)                     |
-| license  | [LICENSE.md](https://github.com/jupiterbak/ayx-node/blob/HEAD/LICENSE.md)
+| source        | [https://github.com/jupiterbak/ayx-node-ts](https://github.com/jupiterbak/ayx-node-ts)                |
+| changelog     | [CHANGELOG.md](https://github.com/jupiterbak/ayx-node-ts/blob/HEAD/CHANGELOG.md)                           |
+| contributing  | [CONTRIBUTING.md](https://github.com/jupiterbak/ayx-node-ts/blob/HEAD/CONTRIBUTING.md)                     |
+| license  | [LICENSE.md](https://github.com/jupiterbak/ayx-node-ts/blob/HEAD/LICENSE.md)
 
 ## Installation
 
@@ -138,7 +135,7 @@ In order to run unit tests, please follow these steps:
 Step 1: Clone this repo.
 
 ```bash
-git clone https://github.com/jupiterbak/ayx-node.git
+git clone https://github.com/jupiterbak/ayx-node-ts.git
 cd ayx-node
 ```
 

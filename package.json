@@ -1,10 +1,18 @@
 {
     "name": "@jupiterbak/ayx-node",
-    "version": "0.1.13",
+    "version": "0.1.14",
     "description": "Another Alteryx Server SDK",
     "main": "./dist/src/index.js",
     "browser": "./dist/src/index.bundle.js",
     "types": "./dist/src/index.d.ts",
+    "files": [
+        "dist/src",
+        "!dist/src/**/*.map",
+        "README.md",
+        "LICENSE",
+        "ALTERYXAPINOTICE.md",
+        "CHANGELOG.md"
+    ],
     "scripts": {
         "clean": "rimraf dist/",
         "clean:dist": "rimraf dist/",
@@ -100,9 +108,16 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/jupiterbak/ayx-node.git"
+        "url": "git+https://github.com/jupiterbak/ayx-node-ts.git"
     },
     "pkg": {
         "assets": "dist/**/*"
+    },
+    "homepage": "https://github.com/jupiterbak/ayx-node-ts#readme",
+    "bugs": {
+        "url": "https://github.com/jupiterbak/ayx-node-ts/issues"
+    },
+    "engines": {
+        "node": ">=16"
     }
 }
