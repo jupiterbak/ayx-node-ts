@@ -13,6 +13,13 @@
 - Repository, homepage and issue links point to github.com/jupiterbak/ayx-node-ts.
 - `AYX_VERSION` now matches the package version.
 
+### Dependencies 0.1.14
+
+- Bumped runtime dependencies (`cross-fetch`, `debug`, `form-data`, `https-proxy-agent`) to current majors; dropped unused leftover dependencies from an earlier CLI.
+- Bumped dev tooling (TypeScript 6, ESLint 10 flat config + `typescript-eslint` replacing TSLint, Rollup 4, `@compodoc/compodoc` 2, Mocha 11, Chai 4.5).
+- CI now runs on Node 22 with current GitHub Action versions.
+- Requires Node.js >= 20.9.
+
 ## 0.0.1 - February 2022
 
 ### New Features 0.0.1

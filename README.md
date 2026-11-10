@@ -33,6 +33,8 @@ The repository implements a typescript SDK which can be used to interact with th
 
 ## Installation
 
+> **Requirements:** Node.js >= 20.9 (see [`engines.node`](./package.json)).
+
 The recommended way to get started using the nodejs is by using the `npm` (Node Package Manager) to install the dependency in your project.
 
 After you've created your own project using `npm init`, you can run:
