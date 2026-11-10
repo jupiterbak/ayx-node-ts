@@ -1,5 +1,4 @@
 import * as chai from "chai";
-import "url-search-params-polyfill";
 import { WorkflowManagementClient, SDKModels, AlteryxSdk } from "../src/api/sdk";
 import { loadAuth } from "../src/api/utils";
 import { existsSync, readFileSync, unlinkSync, writeFileSync} from 'fs';

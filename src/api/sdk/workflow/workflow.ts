@@ -46,7 +46,7 @@ import {WorkflowManagementClientV1} from "./workflowV1"
      * @returns {Promise<SDKModels.WorkflowView>} - A promise that resolves to the workflow details
      * @memberOf WorkflowManagementClient
      */
-    public async GetWorkflow(workflowId: String): Promise<SDKModels.WorkflowView> {
+    public async GetWorkflow(workflowId: string): Promise<SDKModels.WorkflowView> {
         // verify required parameter 'workflowId' is not null or undefined
         if (workflowId === null || workflowId === undefined) {
             throw new SDKModels.RequiredError('workflowId','Required parameter workflowId was null or undefined when calling GetWorkflow.');
@@ -297,7 +297,7 @@ import {WorkflowManagementClientV1} from "./workflowV1"
             credentialId?: string,
             collectionIds?: string[]
            }
-    ): Promise<String> {
+    ): Promise<string> {
         // verify required parameter 'params' is not null or undefined
         if (params === null || params === undefined) {
             throw new SDKModels.RequiredError('params','Required parameter params was null or undefined when calling CreateWorkflow.');
@@ -348,7 +348,7 @@ import {WorkflowManagementClientV1} from "./workflowV1"
             body: worflowDataTemplate(params),
             multiPartFormData: true,
             //additionalHeaders: { enctype: "multipart/form-data" },
-        })) as String;
+        })) as string;
     }
 
     /**

@@ -1,5 +1,4 @@
 import * as chai from "chai";
-import "url-search-params-polyfill";
 import { CollectionManagementClient, AlteryxSdk } from "../src/api/sdk";
 import { loadAuth } from "../src/api/utils";
 
@@ -125,7 +124,7 @@ describe("[SDK] Collection Management Client", () => {
 });
 async function cleanup(colSDK: CollectionManagementClient) {
     const groups = await (await colSDK.GetCollections())
-    .filter((x) => { var _a; return (_a = x.name) === null || _a === void 0 ? void 0 : _a.startsWith("unit.test.alteryx.rocks"); });
+    .filter((x) => { let _a; return (_a = x.name) === null || _a === void 0 ? void 0 : _a.startsWith("unit.test.alteryx.rocks"); });
 
     for (let index = 0; index < groups.length; index++) {
         const element = groups[index];

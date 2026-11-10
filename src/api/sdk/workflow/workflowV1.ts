@@ -19,7 +19,7 @@ import { SDKModelsV1 } from "../models/modelsV1";
      * @returns {Promise<Response>}
      * @memberOf WorkflowManagementClientV1
      */
-     public async GetAppInfoV1(appId: String): Promise<Response> {
+     public async GetAppInfoV1(appId: string): Promise<Response> {
         // verify required parameter 'appId' is not null or undefined
         if (appId === null || appId === undefined) {
             throw new SDKModelsV1.RequiredError('appId','Required parameter appId was null or undefined when calling GetAppInfo.');
@@ -43,7 +43,7 @@ import { SDKModelsV1 } from "../models/modelsV1";
      * @returns {Promise<Array<QuestionApiView>>}
      * @memberOf WorkflowManagementClientV1
      */
-     public async GetAppQuestionsV1(appId: String): Promise<Array<SDKModelsV1.QuestionApiView>> {
+     public async GetAppQuestionsV1(appId: string): Promise<Array<SDKModelsV1.QuestionApiView>> {
         // verify required parameter 'appId' is not null or undefined
         if (appId === null || appId === undefined) {
             throw new SDKModelsV1.RequiredError('appId','Required parameter appId was null or undefined when calling GetAppQuestions.');

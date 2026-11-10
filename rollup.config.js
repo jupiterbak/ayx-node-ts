@@ -1,9 +1,12 @@
+import { createRequire } from "module";
 import nodePolyfills from "rollup-plugin-node-polyfills";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
-import pkg from "./package.json";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
+
+const require = createRequire(import.meta.url);
+const pkg = require("./package.json");
 
 export default [
     // browser-friendly UMD build

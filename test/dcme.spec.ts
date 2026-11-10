@@ -1,5 +1,4 @@
 import * as chai from "chai";
-import "url-search-params-polyfill";
 import { DCMEConnectionClient, SDKModels, AlteryxSdk } from "../src/api/sdk";
 import { decrypt, loadAuth } from "../src/api/utils";
 import { getPasskeyForUnitTest} from "./test-utils";
@@ -15,7 +14,7 @@ describe("[SDK] DCME Client", () => {
     const workflowClient = sdk.GetWorkflowManagementClient();
     //const dummyScheduleFileBuffer = readFileSync("test/data/Dummy_Schedules.yxzp");
     const scheduleName = `${new Date().getTime()}.unit.test.alteryx.rocks`;
-    let _scheduleId = "";
+    const _scheduleId = "";
 
     before(async () => {
         await cleanup(dcmeClient);

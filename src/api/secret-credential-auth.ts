@@ -1,4 +1,4 @@
-import * as debug from "debug";
+import debug from "debug";
 import fetch from "cross-fetch";
 import { AuthBase } from "./auth-base";
 import { TokenRotation } from "./alteryx-base";

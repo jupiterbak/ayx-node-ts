@@ -1,5 +1,4 @@
 import * as chai from "chai";
-import "url-search-params-polyfill";
 import { CredentialsManagementClient, SDKModels, AlteryxSdk } from "../src/api/sdk";
 import { decrypt, loadAuth } from "../src/api/utils";
 import { getPasskeyForUnitTest} from "./test-utils";
@@ -13,7 +12,7 @@ describe("[SDK] Credential Management Client", () => {
     const credentialsClient = sdk.GetCredentialsManagementClient();
     const userClient = sdk.GetUserManagementClient();
     const credentialName = `${new Date().getTime()}.unit.test.alteryx.rocks`;
-    let _credentialId = "";
+    const _credentialId = "";
 
     before(async () => {
         await cleanup(credentialsClient);

@@ -1,6 +1,5 @@
 import * as chai from "chai";
 import { readFileSync } from "fs";
-import "url-search-params-polyfill";
 import { UserManagementClient, SDKModels, AlteryxSdk } from "../src/api/sdk";
 import { decrypt, loadAuth } from "../src/api/utils";
 import { getPasskeyForUnitTest } from "./test-utils";

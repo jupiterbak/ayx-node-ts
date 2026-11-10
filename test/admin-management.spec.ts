@@ -1,5 +1,4 @@
 import * as chai from "chai";
-import "url-search-params-polyfill";
 import { WorkflowManagementClient, AlteryxSdk } from "../src/api/sdk";
 import { decrypt, loadAuth } from "../src/api/utils";
 import { getPasskeyForUnitTest} from "./test-utils";
@@ -14,7 +13,7 @@ describe("[SDK] Admin Tasks Management Client", () => {
     const wClient = sdk.GetWorkflowManagementClient();
     const dummyWorkflowFileBuffer = readFileSync("test/data/Dummy_Workflows.yxzp", {flag:'r',encoding:null});
     let suscriptionId = "";
-    let createdWorkflowId = "";
+    const createdWorkflowId = "";
     // Generate extId
     const extId = new Date().getTime().toString();
 
@@ -172,7 +171,7 @@ describe("[SDK] Admin Tasks Management Client", () => {
 
     it("16. should forecast all jobs for the next 7 days using V2 API", async () => {
         const now = new Date();
-        var nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
         const tmps = await aClient.AdminGetScheduleForecastV2(nextWeek, now);
         tmps.length!.should.be.greaterThanOrEqual(0);
     });

@@ -1,8 +1,8 @@
 import fetch from "cross-fetch";
-import * as debug from "debug";
+import debug from "debug";
 import { removeUndefined, throwError } from "./utils";
 import { AYX_NAME, AYX_VERSION } from "../version";
-const HttpsProxyAgent = require("https-proxy-agent");
+import { HttpsProxyAgent } from "https-proxy-agent";
 const log = debug("ayx-node");
 
 /**

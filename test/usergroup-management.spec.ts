@@ -1,5 +1,4 @@
 import * as chai from "chai";
-import "url-search-params-polyfill";
 import { UserGroupManagementClient, UserManagementClient, SDKModels, AlteryxSdk } from "../src/api/sdk";
 import { decrypt, loadAuth } from "../src/api/utils";
 import { getPasskeyForUnitTest } from "./test-utils";
@@ -118,7 +117,7 @@ describe("[SDK] User Group Management Client", () => {
 });
 async function cleanup(groupSDK: UserGroupManagementClient) {
     const groups = await (await groupSDK.GetUserGroups())
-    .filter((x) => { var _a; return (_a = x.name) === null || _a === void 0 ? void 0 : _a.startsWith("unit.test.alteryx.rocks"); });
+    .filter((x) => { let _a; return (_a = x.name) === null || _a === void 0 ? void 0 : _a.startsWith("unit.test.alteryx.rocks"); });
 
     for (let index = 0; index < groups.length; index++) {
         const element = groups[index];

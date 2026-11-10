@@ -19,11 +19,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Setup NodeJS
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: 16.x
+        node-version: 22.x
         cache: 'npm'
     - name: install dependencies
       run: |
@@ -31,7 +31,7 @@ jobs:
     - name: Build Docs
       run: npm run doc
     - name: Open Pull Request
-      uses: peter-evans/create-pull-request@v4
+      uses: peter-evans/create-pull-request@v7
       with:
         title: 'docs: generate docs from latest main'
         delete-branch: true

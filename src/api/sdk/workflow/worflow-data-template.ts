@@ -1,7 +1,7 @@
-var FormData = require('form-data');
+const FormData = require('form-data');
 
 export const worflowDataTemplate = (params: any) =>{
-    var form = new FormData();
+    const form = new FormData();
     form.setBoundary("--alteryx");
     form.append( 'file', params.file  as Buffer, params.name );
     form.append( 'ownerId', params.ownerId );
@@ -29,13 +29,13 @@ export const worflowDataTemplate = (params: any) =>{
     if (params.sourceAppId){
         form.append( 'sourceAppId', params.sourceAppId || "AYX CLI");
     }
-    let data = form.getBuffer();
+    const data = form.getBuffer();
     return data;
 }
 
 
 export const worflowVersionDataTemplate = (params: any) => {
-    var form = new FormData();
+    const form = new FormData();
     form.setBoundary("--alteryx");
     if (params.file){
         form.append( 'file', params.file  as Buffer, params.name );
@@ -61,6 +61,6 @@ export const worflowVersionDataTemplate = (params: any) => {
     if (params.sourceAppId){
         form.append( 'sourceAppId', params.sourceAppId || "AYX CLI");
     }
-    let data = form.getBuffer();
+    const data = form.getBuffer();
     return data;
 } 

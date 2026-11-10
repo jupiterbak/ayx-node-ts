@@ -235,7 +235,7 @@ export function getFullConfig(): { credentials: authJson[] } {
 
     // Read and parse the configuration file
     const buffer = fs.readFileSync(pathName);
-    let obj = JSON.parse(buffer.toString());
+    const obj = JSON.parse(buffer.toString());
 
     return obj;
 }

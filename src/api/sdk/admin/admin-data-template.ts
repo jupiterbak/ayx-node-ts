@@ -1,7 +1,7 @@
-var FormData = require('form-data');
+const FormData = require('form-data');
 
 export const adminWorkflowDataTemplate = (params: any) =>{
-    var form = new FormData();
+    const form = new FormData();
 
     form.setBoundary("--alteryx");
     form.append( 'file', params.file  as Buffer, params.name );
@@ -16,6 +16,6 @@ export const adminWorkflowDataTemplate = (params: any) =>{
     if (params.sourceAppId){
         form.append( 'sourceAppId', params.sourceAppId || "AYX CLI");
     }
-    let data = form.getBuffer();
+    const data = form.getBuffer();
     return data;
 }
